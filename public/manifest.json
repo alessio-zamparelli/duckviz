@@ -1,0 +1,19 @@
+{
+	"icons": [],
+	"theme_color": "#f1f1f1",
+	"background_color": "#0a0a0a",
+	"display": "standalone",
+	"dir": "auto",
+	"lang": "en-US",
+	"name": "duckviz",
+	"short_name": "DuckViz",
+	"start_url": "/",
+	"file_handlers": [
+		{
+			"action": "/openFile",
+			"accept": {
+				"application/vnd.apache.parquet": [".parquet"]
+			}
+		}
+	]
+}
