@@ -39,7 +39,7 @@ export default defineConfig({
 	},
 
 	optimizeDeps: {
-		exclude: ["plotly.js", "react-chart-editor", "plotly.js-dist-min"],
+		// exclude: ["plotly.js", "react-chart-editor", "plotly.js-dist-min"],
 		esbuildOptions: {
 			define: {
 				global: "globalThis"

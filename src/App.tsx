@@ -1,111 +1,93 @@
 import "./App.css"
 
-import CodeBox from "@/components/code-box"
-
-import {
-	ResizableHandle,
-	ResizablePanel,
-	ResizablePanelGroup
-} from "@/components/ui/resizable"
-import { Button } from "@/components/ui/button"
-import {  db } from "@/lib/duck"
-import { DuckDBDataProtocol } from "@duckdb/duckdb-wasm"
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Toaster } from "@/components/ui/sonner"
-import { toast } from "sonner"
-import { ResultBox } from "@/components/result-box"
+import { TreeBox } from "@/components/box/tree-box"
+import { ActivePanelSelector } from "@/components/active-panel"
 
 export default function App() {
-	// async function handleFiles(files) {
-	// 	for (const file of files) {
-	// 		const blob = await file.getFile()
-	// 		blob.handle = file
-	// 		const text = await blob.text()
+  // async function handleFiles(files) {
+  // 	for (const file of files) {
+  // 		const blob = await file.getFile()
+  // 		blob.handle = file
+  // 		const text = await blob.text()
 
-	// 		console.log(`${file.name} handled, content: ${text}`)
-	// 	}
-	// }
+  // 		console.log(`${file.name} handled, content: ${text}`)
+  // 	}
+  // }
 
-	async function getTheFile() {
-		if (!("showOpenFilePicker" in window))
-			return alert("not supported by your browser")
+  // async function getTheFile() {
+  // 	if (!("showOpenFilePicker" in window))
+  // 		return alert("not supported by your browser")
 
-		const [fileHandle] = await window.showOpenFilePicker()
-		const file = await fileHandle.getFile()
-		console.log("loaded", file.name)
-		await db.registerFileHandle(
-			file.name,
-			file,
-			DuckDBDataProtocol.BROWSER_FILEREADER,
-			true
-		)
-		toast("File loaded " + file.name)
+  // 	const [fileHandle] = await window.showOpenFilePicker()
+  // 	const file = await fileHandle.getFile()
+  // 	console.log("loaded", file.name)
+  // 	await db.registerFileHandle(
+  // 		file.name,
+  // 		file,
+  // 		DuckDBDataProtocol.BROWSER_FILEREADER,
+  // 		true
+  // 	)
+  // 	toast("File loaded " + file.name)
 
-		// if ("launchQueue" in window) {
-		// 	console.log("File Handling API is supported!")
+  // 	// if ("launchQueue" in window) {
+  // 	// 	console.log("File Handling API is supported!")
 
-		// 	launchQueue.setConsumer((launchParams) => {
-		// 		handleFiles(launchParams.files)
-		// 	})
-		// } else {
-		// 	console.error("File Handling API is not supported!")
-		// }
-		// const pickerOpts = {
-		// 	types: [
-		// 		{
-		// 			description: "Images",
-		// 			accept: {
-		// 				"image/*": [".png", ".gif", ".jpeg", ".jpg"]
-		// 			}
-		// 		}
-		// 	],
-		// 	excludeAcceptAllOption: true,
-		// 	multiple: false
-		// }
+  // 	// 	launchQueue.setConsumer((launchParams) => {
+  // 	// 		handleFiles(launchParams.files)
+  // 	// 	})
+  // 	// } else {
+  // 	// 	console.error("File Handling API is not supported!")
+  // 	// }
+  // 	// const pickerOpts = {
+  // 	// 	types: [
+  // 	// 		{
+  // 	// 			description: "Images",
+  // 	// 			accept: {
+  // 	// 				"image/*": [".png", ".gif", ".jpeg", ".jpg"]
+  // 	// 			}
+  // 	// 		}
+  // 	// 	],
+  // 	// 	excludeAcceptAllOption: true,
+  // 	// 	multiple: false
+  // 	// }
 
-		// // open file picker
-		// const [fileHandle] = await window.showOpenFilePicker(pickerOpts)
+  // 	// // open file picker
+  // 	// const [fileHandle] = await window.showOpenFilePicker(pickerOpts)
 
-		// // get file contents
-		// console.log(fileHandle)
-		// // const fileData = await fileHandle.getFile()
-		// // return fileData
-	}
+  // 	// // get file contents
+  // 	// console.log(fileHandle)
+  // 	// // const fileData = await fileHandle.getFile()
+  // 	// // return fileData
+  // }
 
-	return (
-		<>
-			<div className="flex gap-2">
-				<Button
-					onClick={() => {
-						getTheFile()
-					}}
-				>
-					Pick file
-				</Button>
-			</div>
-			<ResizablePanelGroup
-				direction="horizontal"
-				className="h-[calc(100%-36px)]"
-			>
-				<ResizablePanel defaultSize={20}>three</ResizablePanel>
-				<ResizableHandle withHandle />
-				<ResizablePanel defaultSize={80}>
-					<ResizablePanelGroup direction="vertical">
-						<ResizablePanel defaultSize={50}>
-							<CodeBox />
-						</ResizablePanel>
-						<ResizableHandle withHandle />
-						<ResizablePanel defaultSize={50}>
-							<div className="h-full overflow-auto">
-								<ResultBox />
-							</div>
-						</ResizablePanel>
-					</ResizablePanelGroup>
-				</ResizablePanel>
-			</ResizablePanelGroup>
+  return (
+    <>
+      <div className="flex gap-2 px-2">
+        <h1 className="font-bold">DuckViz</h1>
+      </div>
+      <ResizablePanelGroup direction="horizontal" className="h-[calc(100%-36px)]">
+        <ResizablePanel defaultSize={20}>
+          <TreeBox />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={80}>
+          <ResizablePanelGroup direction="vertical">
+            <ResizablePanel defaultSize={50}>
+              <ActivePanelSelector position="top" />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={50}>
+              <ActivePanelSelector position="bottom" />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </ResizablePanel>
+      </ResizablePanelGroup>
 
-			<Toaster />
-		</>
-	)
+      <Toaster />
+    </>
+  )
 }
 
 // return (

@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button"
 interface DataTableColumnHeaderProps<TData, TValue>
 	extends React.HTMLAttributes<HTMLDivElement> {
 	column: Column<TData, TValue>
-	title: string
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	title: any
 }
 
 export function DataTableColumnHeader<TData, TValue>({

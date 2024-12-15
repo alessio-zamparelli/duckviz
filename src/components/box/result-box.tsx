@@ -6,10 +6,10 @@ import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-col
 import { useState } from "react"
 import { Field, Table } from "apache-arrow"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import PlotBuilder from "@/components/plot-builder"
+import PlotBuilder from "@/components/box/plot-builder"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Field2Typed } from "@/lib/utils"
+import { Field2Typed } from "@/lib/utils-components"
 
 export function ResultBox() {
 	const queryAnswerArrow = useAtomValue(queryAnswerArrowAtom)
@@ -80,10 +80,10 @@ const c = (field: Field): ColumnDef<RowData> => {
 	}
 }
 
-function Table2Column(table: Table) {
+export function Table2Column(table: Table) {
 	return table.schema.fields.map(c)
 }
 
-function Table2Data(table: Table) {
+export function Table2Data(table: Table) {
 	return table.toArray().map((row) => row.toJSON())
 }

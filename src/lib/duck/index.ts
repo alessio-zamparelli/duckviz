@@ -48,3 +48,4 @@ export async function closeConn() {
 	await db.terminate()
 	worker.terminate()
 }
+
