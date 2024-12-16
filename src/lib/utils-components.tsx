@@ -25,7 +25,7 @@ export const Field2Typed = (field?: Field) => {
         </span>
       ), //`${field.name}${field.nullable && "?"}`,
       formatter: (v: unknown) => new Date(v as number).toLocaleString(),
-      typed: (v: unknown) => new Date(v as number),
+      typed: (v: unknown) => new Date(Number((v as bigint) / 1000000n)),
     }
   }
   if (DataType.isInt(field?.type)) {

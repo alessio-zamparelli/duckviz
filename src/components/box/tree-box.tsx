@@ -6,8 +6,9 @@ import { DuckDBDataProtocol } from "@duckdb/duckdb-wasm"
 import { useSetAtom } from "jotai"
 import { toast } from "sonner"
 import { useImmer } from "use-immer"
-import { filesEntries, setFile } from "@/lib/store"
+import { deleteFile, filesEntries, setFile } from "@/lib/store"
 import { useEffect } from "react"
+import { XIcon } from "lucide-react"
 
 export function TreeBox() {
   const [tables, setTables] = useImmer<TreeDataItem[]>([{ id: "external", name: "Externals", children: [] }])
@@ -58,6 +59,16 @@ export function TreeBox() {
     })
   }
 
+  async function deleteRegisteredFile(fileName: string) {
+    await deleteFile(fileName)
+
+    setTables(s => {
+      s.find(e => e.id === "external")!.children = s
+        .find(e => e.id === "external")
+        ?.children?.filter(e => e.name !== fileName)
+    })
+  }
+
   useEffect(() => {
     ;(async () => {
       const entries = await filesEntries()
@@ -74,6 +85,11 @@ export function TreeBox() {
               id: name,
               name: name,
               onClick: () => setQueryText(s => s + " '" + name + "'"),
+              actions: (
+                <Button size="icon-sm" onClick={() => deleteRegisteredFile(name)}>
+                  <XIcon />
+                </Button>
+              ),
             })
           })
         }

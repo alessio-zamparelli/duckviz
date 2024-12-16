@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Plotly from "../../lib/plotly.js"
 import { Table } from "apache-arrow"
 import createPlotlyComponent from "react-plotly.js/factory"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 // function getPlot(type: string, x: string, y: string){}
 import { useImmer } from "use-immer"
 import { Button } from "@/components/ui/button"
@@ -86,6 +86,33 @@ export default function PlotBuilder({ data }: { data: Table }) {
   // 	containerRef.current.append(plot)
   // 	return () => plot.remove()
   // }, [data, height, traces, width, xTrace])
+
+  useEffect(() => {
+    const x0 = data.getChild(xTrace)?.toArray()[0]
+    console.log("x0", x0)
+    console.log(
+      "x0 field",
+      data.schema.fields.find(e => e.name === xTrace)
+    )
+    console.log("x0 typed", Field2Typed(data.schema.fields.find(e => e.name === xTrace)).typed(x0))
+
+    console.log(
+      "[PLOT] traces",
+      traces.map(
+        t =>
+          ({
+            type: "scatter",
+            x: [...(data.getChild(xTrace)?.toArray() ?? [])].map(
+              Field2Typed(data.schema.fields.find(e => e.name === xTrace)).typed
+            ),
+            y: [...(data.getChild(t)?.toArray() ?? [])].map(
+              Field2Typed(data.schema.fields.find(e => e.name === t)).typed
+            ),
+            name: t,
+          } as Data)
+      )
+    )
+  }, [data, traces, xTrace])
 
   return (
     <div className="grow h-full">
