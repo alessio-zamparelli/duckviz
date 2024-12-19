@@ -20,16 +20,17 @@ export function useExecuteQuery() {
       .query(text ?? queryText)
       .then(r => {
         setQueryAnswerArrow(r)
-        console.table(
-          r.schema.fields.map(t => ({
-            name: t.name,
-            type: t.type,
-            // isInt: arrow.DataType.isInt(t.type),
-            // isTimestamp: arrow.DataType.isTimestamp(t.type),
-            // typeId: t.typeId,
-            // nullable: t.nullable
-          }))
-        )
+        console.log("query answer datatype", r.schema.fields)
+        // console.table(
+        //   r.schema.fields.map(t => ({
+        //     name: t.name,
+        //     type: t.type,
+        //     // isInt: arrow.DataType.isInt(t.type),
+        //     // isTimestamp: arrow.DataType.isTimestamp(t.type),
+        //     // typeId: t.typeId,
+        //     // nullable: t.nullable
+        //   }))
+        // )
         // setQueryAnswer(
         // 	JSON.parse(
         // 		JSON.stringify(r.toArray(), (_, v) =>

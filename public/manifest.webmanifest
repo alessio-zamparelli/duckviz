@@ -1,0 +1,26 @@
+{
+  "name": "DuckViz",
+  "short_name": "DuckViz",
+  "description": "DuckViz: duckdb + plotly + monaco editor ? great!",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#f1f1f1",
+  "background_color": "#0a0a0a",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "en-US",
+  "start_url": "/",
+  "file_handlers": [
+    {
+      "action": "/openFile",
+      "accept": {
+        "application/vnd.apache.parquet": [".parquet"]
+      }
+    }
+  ]
+}

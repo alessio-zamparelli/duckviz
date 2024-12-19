@@ -4,6 +4,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
 import { Toaster } from "@/components/ui/sonner"
 import { TreeBox } from "@/components/box/tree-box"
 import { ActivePanelSelector } from "@/components/active-panel"
+import { PlotConfig } from "@/components/box/plot-builder"
 
 export default function App() {
   // async function handleFiles(files) {
@@ -67,6 +68,7 @@ export default function App() {
       <div className="flex gap-2 px-2">
         <h1 className="font-bold">DuckViz</h1>
       </div>
+
       <ResizablePanelGroup direction="horizontal" className="h-[calc(100%-36px)]">
         <ResizablePanel defaultSize={20}>
           <TreeBox />
@@ -86,6 +88,8 @@ export default function App() {
       </ResizablePanelGroup>
 
       <Toaster />
+
+      <PlotConfig />
     </>
   )
 }

@@ -3,14 +3,19 @@ import { activePanelAtom, panelType } from "@/atoms/state"
 import CodeBox from "@/components/box/code-box"
 import PlotBuilder from "@/components/box/plot-builder"
 import { Table2Column, Table2Data } from "@/components/box/result-box"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DataTable } from "@/components/ui/data-table"
+import { DataTable } from "@/components/ui/virtualized-data-table"
 import { useAtom } from "jotai"
 import { ChartLineIcon, DatabaseIcon, TableIcon } from "lucide-react"
+import { useRef } from "react"
+import { useResizeObserver } from "usehooks-ts"
 
 export function ActivePanelSelector({ position }: { position: "top" | "bottom" }) {
   const [activePanel, setActivePanel] = useAtom(activePanelAtom)
   const [queryAnswerArrow] = useAtom(queryAnswerArrowAtom)
+  const ref = useRef<HTMLDivElement>(null)
+  const { height = 0 } = useResizeObserver({ ref, box: "border-box" })
 
   function Selector({ active }: { active: panelType }) {
     return (
@@ -77,10 +82,17 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
   }
   if (activePanel[position] === "table") {
     return (
-      <div className="flex h-full overflow-auto">
+      <div className="flex h-full overflow-auto" ref={ref}>
         {queryAnswerArrow ? (
           <div className="grow">
-            <DataTable columns={Table2Column(queryAnswerArrow)} data={Table2Data(queryAnswerArrow)} />
+            <DataTable
+              height={height - 2 + "px"}
+              columns={Table2Column(queryAnswerArrow)}
+              data={Table2Data(queryAnswerArrow)}
+            />
+            <div className="absolute bottom-1 right-1">
+              <Badge>{queryAnswerArrow.numRows} row(s)</Badge>
+            </div>
           </div>
         ) : (
           <p className="grow">Execute a query first</p>

@@ -1,6 +1,17 @@
 import { DataType, Field } from "apache-arrow"
 import { CalendarClockIcon, CalendarIcon, FileQuestionIcon, HashIcon, TypeIcon } from "lucide-react"
 
+const tsTyped = {
+  // s
+  0: (v: unknown) => new Date(Number((v as bigint) * 1_000n)),
+  // ms
+  1: (v: unknown) => new Date(Number(v as bigint)),
+  // tz
+  2: (v: unknown) => new Date(Number((v as bigint) / 1_000n)),
+  // ns
+  3: (v: unknown) => new Date(Number((v as bigint) / 1_000_000n)),
+}
+
 export const Field2Typed = (field?: Field) => {
   if (DataType.isDate(field?.type)) {
     return {
@@ -25,7 +36,7 @@ export const Field2Typed = (field?: Field) => {
         </span>
       ), //`${field.name}${field.nullable && "?"}`,
       formatter: (v: unknown) => new Date(v as number).toLocaleString(),
-      typed: (v: unknown) => new Date(Number((v as bigint) / 1000000n)),
+      typed: tsTyped[field.type.unit],
     }
   }
   if (DataType.isInt(field?.type)) {
