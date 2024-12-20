@@ -2,12 +2,13 @@
 // import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror"
 import { useAtom } from "jotai"
 import { queryTextAtom } from "@/atoms/query"
-import { useCallback, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { useExecuteQuery } from "@/lib/duck/query"
 // import * as events from "@uiw/codemirror-extensions-events"
-import Editor, { EditorProps } from "@monaco-editor/react"
+import Editor, { EditorProps, useMonaco } from "@monaco-editor/react"
 import { KeyCode, KeyMod, type editor } from "monaco-editor"
 import { conn } from "@/lib/duck"
+import { useTheme } from "@/components/theme-provider"
 
 export default function CodeBox() {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
@@ -15,6 +16,8 @@ export default function CodeBox() {
   // const [value, setValue] = useState("")
   // const [view, setView] = useState<ViewUpdate>()
   const { executeQuery } = useExecuteQuery()
+  const { theme } = useTheme()
+  const monaco = useMonaco()
 
   // const ref = useRef(null)
   // const { height = 0 } = useResizeObserver({
@@ -198,13 +201,21 @@ export default function CodeBox() {
     })
   }
 
+  useEffect(() => {
+    if (theme === "dark") {
+      monaco?.editor.setTheme("vs-dark")
+    } else if (theme === "light") {
+      monaco?.editor.setTheme("light")
+    }
+  }, [monaco?.editor, theme])
+
   return (
     <Editor
       height="100%"
       language="sql"
       value={queryText}
       onMount={handleEditorDidMount}
-      theme="vs-dark"
+      theme={theme === "dark" ? "vs-dark" : undefined}
       onChange={onChange2}
     />
   )

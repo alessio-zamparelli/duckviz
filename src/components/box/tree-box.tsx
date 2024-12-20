@@ -7,7 +7,7 @@ import { useAtom, useSetAtom } from "jotai"
 import { toast } from "sonner"
 import { deleteFile, filesEntries, setFile } from "@/lib/store"
 import { useEffect } from "react"
-import { FileUpIcon, XIcon } from "lucide-react"
+import { FileIcon, FileUpIcon, XIcon } from "lucide-react"
 import { treeAtom } from "@/atoms/state"
 
 export function TreeBox() {
@@ -70,31 +70,35 @@ export function TreeBox() {
   }
 
   useEffect(() => {
-    ;(async () => {
+    const registerIndexedTables = async () => {
       const entries = await filesEntries()
       console.log("🚀 - file: tree-box.tsx:65 - ; - entries:", entries)
 
-      const actualTables = tables.find(e => e.id === "external")?.children?.map(e => e.name)
+      const actualTables = tables.find(e => e.id === "external")!.children!.map(e => e.name)
 
       for (const [name, file] of entries) {
-        if (!actualTables?.includes(name)) {
+        if (!actualTables.includes(name)) {
           console.log(name, file)
           await db.registerFileHandle(name, file, DuckDBDataProtocol.BROWSER_FILEREADER, true)
           setTables(s => {
-            s.find(e => e.id === "external")?.children?.push({
-              id: name,
-              name: name,
-              onClick: () => setQueryText(s => s + " '" + name + "'"),
-              actions: (
-                <Button size="icon-sm" onClick={() => deleteRegisteredFile(name)}>
-                  <XIcon />
-                </Button>
-              ),
-            })
+            if (!actualTables.includes(name))
+              s.find(e => e.id === "external")?.children?.push({
+                id: name,
+                name: name,
+                onClick: () => setQueryText(s => s + " '" + name + "'"),
+                icon: FileIcon,
+                actions: (
+                  <Button size="icon-sm" onClick={() => deleteRegisteredFile(name)}>
+                    <XIcon />
+                  </Button>
+                ),
+              })
           })
         }
       }
-    })()
+    }
+
+    registerIndexedTables()
 
     return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -2,6 +2,7 @@ import { queryAnswerArrowAtom, queryTextAtom } from "@/atoms/query"
 import { isLoadingAtom, treeAtom } from "@/atoms/state"
 import { conn } from "@/lib/duck"
 import { useAtom, useSetAtom } from "jotai"
+import { ScanEyeIcon, TableIcon } from "lucide-react"
 
 import { toast } from "sonner"
 
@@ -28,7 +29,7 @@ export function useExecuteQuery() {
             id: t.name,
             name: t.name,
             onClick: () => setQueryText(s => s + " '" + t.name + "'"),
-            // icon: t.type === "BASE TABLE" ? "TableIcon" : undefined, //<TableIcon /> : <></>,
+            icon: t.type === "BASE TABLE" ? TableIcon : t.type === "VIEW" ? ScanEyeIcon : undefined, //<TableIcon /> : <></>,
           }))
         })
       })

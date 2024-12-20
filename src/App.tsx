@@ -6,6 +6,7 @@ import { TreeBox } from "@/components/box/tree-box"
 import { ActivePanelSelector } from "@/components/active-panel"
 import { PlotConfig } from "@/components/box/plot-builder"
 import { GithubIcon } from "@/lib/github"
+import { ModeToggle } from "@/components/theme-toggle"
 
 export default function App() {
   // async function handleFiles(files) {
@@ -72,9 +73,12 @@ export default function App() {
           <h1 className="font-bold">DuckViz</h1>
         </div>
 
-        <a href="https://github.com/alessio-zamparelli/duckviz" className="h-8 w-8 p-1">
-          <GithubIcon />
-        </a>
+        <div className="flex gap-2">
+          <a href="https://github.com/alessio-zamparelli/duckviz" className="h-8 w-8 p-1">
+            <GithubIcon />
+          </a>
+          <ModeToggle />
+        </div>
       </div>
 
       <ResizablePanelGroup direction="horizontal" className="h-[calc(100%-40px)]">
