@@ -25,7 +25,6 @@ export default defineConfig({
         if (id.includes("node_modules/elementary-circuits-directed-graph")) return true
       },
     }),
-    VitePluginRadar({ gtm: [{ id: "GTM-NVJVNP8W" }] }),
     wasm(),
     react(),
   ],

@@ -57,8 +57,7 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "use-immer": "^0.11.0",
-    "usehooks-ts": "^3.1.0",
-    "vite-plugin-radar": "^0.9.6"
+    "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
