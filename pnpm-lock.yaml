@@ -104,6 +104,9 @@ importers:
       react-virtuoso:
         specifier: ^4.12.3
         version: 4.12.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      simple-icons:
+        specifier: ^13.21.0
+        version: 13.21.0
       sonner:
         specifier: ^1.7.1
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2975,6 +2978,10 @@ packages:
 
   signum@1.0.0:
     resolution: {integrity: sha512-yodFGwcyt59XRh7w5W3jPcIQb3Bwi21suEfT7MAWnBX3iCdklJpgDgvGT9o04UonglZN5SNMfJFkHIR/jO8GHw==}
+
+  simple-icons@13.21.0:
+    resolution: {integrity: sha512-LI5pVJPBv6oc79OMsffwb6kEqnmB8P1Cjg1crNUlhsxPETQ5UzbCKQdxU+7MW6+DD1qfPkla/vSKlLD4IfyXpQ==}
+    engines: {node: '>=0.12.18'}
 
   sonner@1.7.1:
     resolution: {integrity: sha512-b6LHBfH32SoVasRFECrdY8p8s7hXPDn3OHUFbZZbiB1ctLS9Gdh6rpX2dVrpQA0kiL5jcRzDDldwwLkSKk3+QQ==}
@@ -6392,6 +6399,8 @@ snapshots:
   signal-exit@4.1.0: {}
 
   signum@1.0.0: {}
+
+  simple-icons@13.21.0: {}
 
   sonner@1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

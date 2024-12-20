@@ -14,7 +14,7 @@ export default function CodeBox() {
   const [queryText, setQueryText] = useAtom(queryTextAtom)
   // const [value, setValue] = useState("")
   // const [view, setView] = useState<ViewUpdate>()
-  const executeQuery = useExecuteQuery()
+  const { executeQuery } = useExecuteQuery()
 
   // const ref = useRef(null)
   // const { height = 0 } = useResizeObserver({

@@ -59,10 +59,11 @@ function SortingIndicator({ isSorted }: { isSorted: SortDirection | false }) {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  height: string
+  height?: string
+  className?: HTMLElement["className"]
 }
 
-export function DataTable<TData, TValue>({ columns, data, height }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, height, className }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const table = useReactTable({
     data,
@@ -78,49 +79,48 @@ export function DataTable<TData, TValue>({ columns, data, height }: DataTablePro
   const { rows } = table.getRowModel()
 
   return (
-    <div className="rounded-md border">
-      <TableVirtuoso
-        style={{ height }}
-        totalCount={rows.length}
-        components={{
-          Table: TableComponent,
-          TableRow: TableRowComponent(rows),
-        }}
-        fixedHeaderContent={() =>
-          table.getHeaderGroups().map(headerGroup => (
-            // Change header background color to non-transparent
-            <TableRow className="bg-card hover:bg-muted" key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
-                return (
-                  <TableHead
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    style={{
-                      width: header.getSize(),
-                    }}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        className="flex items-center"
-                        {...{
-                          style: header.column.getCanSort()
-                            ? {
-                                cursor: "pointer",
-                                userSelect: "none",
-                              }
-                            : {},
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}>
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        <SortingIndicator isSorted={header.column.getIsSorted()} />
-                      </div>
-                    )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))
-        }
-      />
-    </div>
+    <TableVirtuoso
+      className={className}
+      style={{ height }}
+      totalCount={rows.length}
+      components={{
+        Table: TableComponent,
+        TableRow: TableRowComponent(rows),
+      }}
+      fixedHeaderContent={() =>
+        table.getHeaderGroups().map(headerGroup => (
+          // Change header background color to non-transparent
+          <TableRow className="bg-card hover:bg-muted" key={headerGroup.id}>
+            {headerGroup.headers.map(header => {
+              return (
+                <TableHead
+                  key={header.id}
+                  colSpan={header.colSpan}
+                  style={{
+                    width: header.getSize(),
+                  }}>
+                  {header.isPlaceholder ? null : (
+                    <div
+                      className="flex items-center"
+                      {...{
+                        style: header.column.getCanSort()
+                          ? {
+                              cursor: "pointer",
+                              userSelect: "none",
+                            }
+                          : {},
+                        onClick: header.column.getToggleSortingHandler(),
+                      }}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      <SortingIndicator isSorted={header.column.getIsSorted()} />
+                    </div>
+                  )}
+                </TableHead>
+              )
+            })}
+          </TableRow>
+        ))
+      }
+    />
   )
 }

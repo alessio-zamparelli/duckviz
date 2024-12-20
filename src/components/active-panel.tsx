@@ -1,27 +1,34 @@
 import { queryAnswerArrowAtom } from "@/atoms/query"
-import { activePanelAtom, panelType } from "@/atoms/state"
+import { activePanelAtom, isLoadingAtom, panelType } from "@/atoms/state"
 import CodeBox from "@/components/box/code-box"
 import PlotBuilder from "@/components/box/plot-builder"
 import { Table2Column, Table2Data } from "@/components/box/result-box"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/virtualized-data-table"
+import { cn } from "@/lib/utils"
 import { useAtom } from "jotai"
 import { ChartLineIcon, DatabaseIcon, TableIcon } from "lucide-react"
-import { useRef } from "react"
-import { useResizeObserver } from "usehooks-ts"
 
 export function ActivePanelSelector({ position }: { position: "top" | "bottom" }) {
   const [activePanel, setActivePanel] = useAtom(activePanelAtom)
   const [queryAnswerArrow] = useAtom(queryAnswerArrowAtom)
-  const ref = useRef<HTMLDivElement>(null)
-  const { height = 0 } = useResizeObserver({ ref, box: "border-box" })
+  const [isLoading] = useAtom(isLoadingAtom)
+
+  // const tableRef = useRef<HTMLDivElement>(null)
+  // const { height = 0 } = useResizeObserver({
+  //   ref: tableRef,
+  //   box: "border-box",
+  //   onResize(size) {
+  //     console.log("resize", size)
+  //   },
+  // })
 
   function Selector({ active }: { active: panelType }) {
     return (
-      <div className="flex flex-col justify-center gap-2 mx-px">
+      <div className="flex flex-col justify-center gap-2 mx-px px-1 shadow">
         <Button
-          size="icon-sm"
+          size="icon-xs"
           variant={active === "query" ? "default" : "ghost"}
           onClick={() => {
             if (position === "top") {
@@ -37,7 +44,7 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
           <DatabaseIcon />
         </Button>
         <Button
-          size="icon-sm"
+          size="icon-xs"
           variant={active === "table" ? "default" : "ghost"}
           onClick={() => {
             if (position === "top") {
@@ -53,7 +60,7 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
           <TableIcon />
         </Button>
         <Button
-          size="icon-sm"
+          size="icon-xs"
           variant={active === "plot" ? "default" : "ghost"}
           onClick={() => {
             if (position === "top") {
@@ -80,13 +87,22 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
       </div>
     )
   }
+
   if (activePanel[position] === "table") {
     return (
-      <div className="flex h-full overflow-auto" ref={ref}>
+      <div className="relative flex h-full overflow-auto" key={position + "wrapper"}>
+        <div
+          className={cn(
+            "absolute inset-0 z-50 backdrop-blur-sm flex items-center justify-center",
+            !isLoading && "hidden"
+          )}>
+          loading
+        </div>
         {queryAnswerArrow ? (
           <div className="grow">
             <DataTable
-              height={height - 2 + "px"}
+              key={position + "table"}
+              className="h-full"
               columns={Table2Column(queryAnswerArrow)}
               data={Table2Data(queryAnswerArrow)}
             />
@@ -95,16 +111,28 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
             </div>
           </div>
         ) : (
-          <p className="grow">Execute a query first</p>
+          <p className="grow flex items-center justify-center">Execute a query first</p>
         )}
         <Selector active="table" />
       </div>
     )
   }
+
   if (activePanel[position] === "plot") {
     return (
-      <div className="flex h-full">
-        {queryAnswerArrow ? <PlotBuilder data={queryAnswerArrow} /> : <p className="grow">Execute a query first</p>}
+      <div className="relative flex h-full">
+        <div
+          className={cn(
+            "absolute inset-0 z-50 backdrop-blur-sm flex items-center justify-center",
+            !isLoading && "hidden"
+          )}>
+          loading
+        </div>
+        {queryAnswerArrow ? (
+          <PlotBuilder data={queryAnswerArrow} />
+        ) : (
+          <p className="grow flex items-center justify-center">Execute a query first</p>
+        )}
         <Selector active="plot" />
       </div>
     )

@@ -1,17 +1,17 @@
 import { queryTextAtom } from "@/atoms/query"
-import { TreeDataItem, TreeView } from "@/components/ui/tree-view"
+import { TreeView } from "@/components/ui/tree-view"
 import { Button } from "@/components/ui/button"
 import { db } from "@/lib/duck"
 import { DuckDBDataProtocol } from "@duckdb/duckdb-wasm"
-import { useSetAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 import { toast } from "sonner"
-import { useImmer } from "use-immer"
 import { deleteFile, filesEntries, setFile } from "@/lib/store"
 import { useEffect } from "react"
-import { XIcon } from "lucide-react"
+import { FileUpIcon, XIcon } from "lucide-react"
+import { treeAtom } from "@/atoms/state"
 
 export function TreeBox() {
-  const [tables, setTables] = useImmer<TreeDataItem[]>([{ id: "external", name: "Externals", children: [] }])
+  const [tables, setTables] = useAtom(treeAtom)
   const setQueryText = useSetAtom(queryTextAtom)
 
   // useEffect(() => {
@@ -101,15 +101,16 @@ export function TreeBox() {
   }, [])
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col justify-between pb-2">
       <TreeView data={tables} />
+
       <Button
         className="w-36 mx-auto"
         variant="outline"
         onClick={() => {
           getTheFile()
         }}>
-        Pick file
+        <FileUpIcon /> Load file
       </Button>
     </div>
   )

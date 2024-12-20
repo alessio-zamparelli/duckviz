@@ -1,14 +1,38 @@
 import { queryAnswerArrowAtom, queryTextAtom } from "@/atoms/query"
-import { isLoadingAtom } from "@/atoms/state"
+import { isLoadingAtom, treeAtom } from "@/atoms/state"
 import { conn } from "@/lib/duck"
-import { useAtomValue, useSetAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 
 import { toast } from "sonner"
 
 export function useExecuteQuery() {
   const setIsLoading = useSetAtom(isLoadingAtom)
   const setQueryAnswerArrow = useSetAtom(queryAnswerArrowAtom)
-  const queryText = useAtomValue(queryTextAtom)
+  const [queryText, setQueryText] = useAtom(queryTextAtom)
+  const setTables = useSetAtom(treeAtom)
+
+  function updateTree() {
+    conn
+      .query(
+        `select table_schema as "schema", table_name as "name", table_type as "type" from information_schema.tables`
+      )
+      .then(r => {
+        const a = r.toArray().map(e => e.toJSON())
+        console.log("res", a)
+
+        const tables = a.map(e => ({ name: e.name, schema: e.schema, type: e.type }))
+        console.table(tables)
+
+        setTables(s => {
+          s.find(e => e.id === "memory")!.children = tables.map(t => ({
+            id: t.name,
+            name: t.name,
+            onClick: () => setQueryText(s => s + " '" + t.name + "'"),
+            // icon: t.type === "BASE TABLE" ? "TableIcon" : undefined, //<TableIcon /> : <></>,
+          }))
+        })
+      })
+  }
 
   function executeQuery(text?: string) {
     setIsLoading(true)
@@ -39,6 +63,7 @@ export function useExecuteQuery() {
         // 	)
         // )
       })
+      .then(() => updateTree())
       .then(() => setIsLoading(false))
       .catch(error => {
         if (error instanceof Error) {
@@ -49,7 +74,7 @@ export function useExecuteQuery() {
       })
   }
 
-  return executeQuery
+  return { executeQuery, updateTree }
 }
 
 // const pickedFile: File = letUserPickFile();

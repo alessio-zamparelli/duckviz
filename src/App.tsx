@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { TreeBox } from "@/components/box/tree-box"
 import { ActivePanelSelector } from "@/components/active-panel"
 import { PlotConfig } from "@/components/box/plot-builder"
+import { GithubIcon } from "@/lib/github"
 
 export default function App() {
   // async function handleFiles(files) {
@@ -65,21 +66,28 @@ export default function App() {
 
   return (
     <>
-      <div className="flex gap-2 px-2">
-        <h1 className="font-bold">DuckViz</h1>
+      <div className="flex gap-2 px-2 py-1 shadow justify-between">
+        <div className="flex items-center gap-2">
+          <img src="/DuckVIZ-logo.png" alt="DuckViz logo" className="h-8 w-8" />
+          <h1 className="font-bold">DuckViz</h1>
+        </div>
+
+        <a href="https://github.com/alessio-zamparelli/duckviz" className="h-8 w-8 p-1">
+          <GithubIcon />
+        </a>
       </div>
 
-      <ResizablePanelGroup direction="horizontal" className="h-[calc(100%-36px)]">
+      <ResizablePanelGroup direction="horizontal" className="h-[calc(100%-40px)]">
         <ResizablePanel defaultSize={20}>
           <TreeBox />
         </ResizablePanel>
-        <ResizableHandle withHandle />
+        <ResizableHandle />
         <ResizablePanel defaultSize={80}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={50}>
               <ActivePanelSelector position="top" />
             </ResizablePanel>
-            <ResizableHandle withHandle />
+            <ResizableHandle />
             <ResizablePanel defaultSize={50}>
               <ActivePanelSelector position="bottom" />
             </ResizablePanel>
