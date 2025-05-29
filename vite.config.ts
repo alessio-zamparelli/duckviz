@@ -1,8 +1,10 @@
-import { defineConfig } from "vite"
+import tailwindcss from "@tailwindcss/vite"
+import basicSSL from "@vitejs/plugin-basic-ssl"
 import react from "@vitejs/plugin-react"
-import wasm from "vite-plugin-wasm"
-import commonjs from "vite-plugin-commonjs"
 import path from "path"
+import { defineConfig } from "vite"
+import commonjs from "vite-plugin-commonjs"
+import wasm from "vite-plugin-wasm"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -25,6 +27,8 @@ export default defineConfig({
     }),
     wasm(),
     react(),
+    tailwindcss(),
+    basicSSL(),
   ],
 
   resolve: {

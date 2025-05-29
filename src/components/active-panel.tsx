@@ -1,3 +1,6 @@
+import { useAtom } from "jotai"
+import { ChartLineIcon, DatabaseIcon, TableIcon } from "lucide-react"
+
 import { queryAnswerArrowAtom } from "@/atoms/query"
 import { activePanelAtom, isLoadingAtom, panelType } from "@/atoms/state"
 import CodeBox from "@/components/box/code-box"
@@ -7,8 +10,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/virtualized-data-table"
 import { cn } from "@/lib/utils"
-import { useAtom } from "jotai"
-import { ChartLineIcon, DatabaseIcon, TableIcon } from "lucide-react"
 
 export function ActivePanelSelector({ position }: { position: "top" | "bottom" }) {
   const [activePanel, setActivePanel] = useAtom(activePanelAtom)
@@ -26,7 +27,7 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
 
   function Selector({ active }: { active: panelType }) {
     return (
-      <div className="flex flex-col justify-center gap-2 mx-px px-1 shadow">
+      <div className="flex flex-col justify-center gap-2 mx-px px-1 shadow-sm">
         <Button
           size="icon-xs"
           variant={active === "query" ? "default" : "ghost"}
@@ -81,7 +82,7 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
 
   if (activePanel[position] === "query") {
     return (
-      <div className="flex h-full">
+      <div className="flex w-full h-full">
         <CodeBox />
         <Selector active="query" />
       </div>
@@ -93,8 +94,8 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
       <div className="relative flex h-full overflow-auto" key={position + "wrapper"}>
         <div
           className={cn(
-            "absolute inset-0 z-50 backdrop-blur-sm flex items-center justify-center",
-            !isLoading && "hidden"
+            "absolute inset-0 z-50 backdrop-blur-xs flex items-center justify-center",
+            !isLoading && "hidden",
           )}>
           loading
         </div>
@@ -123,8 +124,8 @@ export function ActivePanelSelector({ position }: { position: "top" | "bottom" }
       <div className="relative flex h-full">
         <div
           className={cn(
-            "absolute inset-0 z-50 backdrop-blur-sm flex items-center justify-center",
-            !isLoading && "hidden"
+            "absolute inset-0 z-50 backdrop-blur-xs flex items-center justify-center",
+            !isLoading && "hidden",
           )}>
           loading
         </div>

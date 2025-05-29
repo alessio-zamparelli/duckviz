@@ -1,10 +1,10 @@
+import { useAtom, useSetAtom } from "jotai"
+import { ScanEyeIcon, TableIcon } from "lucide-react"
+import { toast } from "sonner"
+
 import { queryAnswerArrowAtom, queryTextAtom } from "@/atoms/query"
 import { isLoadingAtom, treeAtom } from "@/atoms/state"
 import { conn } from "@/lib/duck"
-import { useAtom, useSetAtom } from "jotai"
-import { ScanEyeIcon, TableIcon } from "lucide-react"
-
-import { toast } from "sonner"
 
 export function useExecuteQuery() {
   const setIsLoading = useSetAtom(isLoadingAtom)
@@ -15,7 +15,7 @@ export function useExecuteQuery() {
   function updateTree() {
     conn
       .query(
-        `select table_schema as "schema", table_name as "name", table_type as "type" from information_schema.tables`
+        `select table_schema as "schema", table_name as "name", table_type as "type" from information_schema.tables`,
       )
       .then(r => {
         const a = r.toArray().map(e => e.toJSON())
@@ -46,6 +46,7 @@ export function useExecuteQuery() {
       .then(r => {
         setQueryAnswerArrow(r)
         console.log("query answer datatype", r.schema.fields)
+        console.log("query answer values", JSON.parse(r.toString()))
         // console.table(
         //   r.schema.fields.map(t => ({
         //     name: t.name,

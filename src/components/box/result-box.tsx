@@ -1,14 +1,14 @@
-import { queryAnswerArrowAtom } from "@/atoms/query"
-import { useAtomValue } from "jotai"
 import { ColumnDef, RowData } from "@tanstack/react-table"
+import { Field, Table } from "apache-arrow"
+import { useAtomValue } from "jotai"
+import { useState } from "react"
+
+import { queryAnswerArrowAtom } from "@/atoms/query"
+import PlotBuilder from "@/components/box/plot-builder"
 import { DataTable } from "@/components/ui/data-table"
 import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header"
-import { useState } from "react"
-import { Field, Table } from "apache-arrow"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import PlotBuilder from "@/components/box/plot-builder"
-
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Field2Typed } from "@/lib/utils-components"
 
 export function ResultBox() {
@@ -31,6 +31,7 @@ export function ResultBox() {
       <TabsContent value="table" className="ciao">
         <ScrollArea>
           <DataTable columns={Table2Column(queryAnswerArrow)} data={Table2Data(queryAnswerArrow)} />
+          <ScrollBar />
         </ScrollArea>
       </TabsContent>
       <TabsContent value="plot" className="h-[calc(100%-48px)] flex flex-col">

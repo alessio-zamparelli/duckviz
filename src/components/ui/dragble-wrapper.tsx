@@ -1,9 +1,10 @@
 // https://github.com/nishansanjuka/react-drag-card/blob/main/components/dragble-wrapper.tsx
 
-import React, { useState, useRef, useCallback, useEffect, ReactNode } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronUp, Maximize, Minimize } from "lucide-react"
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react"
+
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
 interface DraggableWrapperProps {
@@ -44,7 +45,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
   minimizeButton = <Minimize size={20} />,
   hidden = false,
   restoreButton = (
-    <Button className="max-w-sm cursor-pointer !justify-start">
+    <Button className="max-w-sm cursor-pointer justify-start!">
       <span className="truncate">Restore {title}</span>
       <ChevronUp className="" />
     </Button>
@@ -95,7 +96,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
         setIsDragging(true)
       }
     },
-    [position, isFullScreen, isMinimized, viewportSize, onPositionChange]
+    [position, isFullScreen, isMinimized, viewportSize, onPositionChange],
   )
 
   const startResize = useCallback(
@@ -172,7 +173,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
         setIsResizing(handle)
       }
     },
-    [isFullScreen, isMinimized, onPositionChange, position, viewportSize.width, viewportSize.height]
+    [isFullScreen, isMinimized, onPositionChange, position, viewportSize.width, viewportSize.height],
   )
 
   const toggleFullScreen = useCallback(() => {
@@ -281,7 +282,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
             "z-40 select-none transition-shadow",
             (isDragging || isResizing) && !isFullScreen && "shadow-lg",
             isFullScreen ? "h-full w-full" : width,
-            className
+            className,
           )}>
           <div onPointerDown={onMouseDown} className="cursor-move">
             {renderHeader()}

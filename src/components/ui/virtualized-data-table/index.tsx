@@ -2,18 +2,18 @@
 
 import {
   ColumnDef,
-  Row,
-  SortDirection,
-  SortingState,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
+  Row,
+  SortDirection,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table"
+import { forwardRef, HTMLAttributes, useState } from "react"
+import { TableVirtuoso } from "react-virtuoso"
 
 import { TableCell, TableHead, TableRow } from "@/components/ui/table"
-import { HTMLAttributes, forwardRef, useState } from "react"
-import { TableVirtuoso } from "react-virtuoso"
 import { cn } from "@/lib/utils"
 
 // Original Table is wrapped with a <div> (see https://ui.shadcn.com/docs/components/table#radix-:r24:-content-manual),
@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils"
 const TableComponent = forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
     <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
-  )
+  ),
 )
 TableComponent.displayName = "TableComponent"
 

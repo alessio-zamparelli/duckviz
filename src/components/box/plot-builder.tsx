@@ -1,26 +1,28 @@
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// @ts-expect-error non ho dichiarato il file
-import Plotly from "../../lib/plotly.js"
 import { Table } from "apache-arrow"
-import createPlotlyComponent from "react-plotly.js/factory"
+import { useAtom } from "jotai"
+import { PlusIcon, TrashIcon } from "lucide-react"
+import { nanoid } from "nanoid"
+import { Data } from "plotly.js"
 import { useRef } from "react"
+import createPlotlyComponent from "react-plotly.js/factory"
+
+import { PlotTypeArray, tracesAtom } from "@/atoms/plot.js"
+import { queryAnswerArrowAtom } from "@/atoms/query.js"
+import { isPlotPanelActiveAtom } from "@/atoms/state.js"
 // function getPlot(type: string, x: string, y: string){}
 import { Button } from "@/components/ui/button"
-import { PlusIcon, TrashIcon } from "lucide-react"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox.js"
+import DraggableWrapper from "@/components/ui/dragble-wrapper"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { defConfig, defLayout } from "@/lib/plotly-config.js"
 // import { getPalette } from "@/lib/utils"
 // import { useResizeObserver } from "usehooks-ts"
 import { Field2Typed } from "@/lib/utils-components"
-import { defConfig, defLayout } from "@/lib/plotly-config.js"
-import { Data } from "plotly.js"
-import DraggableWrapper from "@/components/ui/dragble-wrapper"
-import { useAtom } from "jotai"
-import { PlotTypeArray, tracesAtom } from "@/atoms/plot.js"
-import { queryAnswerArrowAtom } from "@/atoms/query.js"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { nanoid } from "nanoid"
-import { isPlotPanelActiveAtom } from "@/atoms/state.js"
-import { Checkbox } from "@/components/ui/checkbox.js"
+
+// @ts-expect-error non ho dichiarato il file
+import Plotly from "../../lib/plotly.js"
 
 export default function PlotBuilder({ data }: { data: Table }) {
   const Plot = createPlotlyComponent(Plotly)
@@ -137,14 +139,14 @@ export default function PlotBuilder({ data }: { data: Table }) {
                 ({
                   type: t.type,
                   x: [...(data.getChild(t.x!)?.toArray() ?? [])].map(
-                    Field2Typed(data.schema.fields.find(e => e.name === t.x)).typed
+                    Field2Typed(data.schema.fields.find(e => e.name === t.x)).typed,
                   ),
                   y: [...(data.getChild(t.y!)?.toArray() ?? [])].map(
-                    Field2Typed(data.schema.fields.find(e => e.name === t.y)).typed
+                    Field2Typed(data.schema.fields.find(e => e.name === t.y)).typed,
                   ),
                   name: t.y,
                   yaxis: t.secondaryY && "y2",
-                } as Data)
+                }) as Data,
             )
           // traces.map(
           //   t =>
@@ -214,7 +216,7 @@ export function PlotConfig() {
   return (
     <DraggableWrapper
       title={"Plot config"}
-      width="min-w-[36rem]"
+      width="min-w-xl"
       height="auto"
       fullScreenWidth="60%"
       fullScreenHeight="auto"

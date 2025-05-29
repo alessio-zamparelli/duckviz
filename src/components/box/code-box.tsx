@@ -1,22 +1,24 @@
-// import { PostgreSQL, sql } from "@codemirror/lang-sql"
-// import CodeMirror, { ViewUpdate } from "@uiw/react-codemirror"
-import { useAtom } from "jotai"
-import { queryTextAtom } from "@/atoms/query"
-import { useCallback, useEffect, useRef } from "react"
-import { useExecuteQuery } from "@/lib/duck/query"
-// import * as events from "@uiw/codemirror-extensions-events"
 import Editor, { EditorProps, useMonaco } from "@monaco-editor/react"
-import { KeyCode, KeyMod, type editor } from "monaco-editor"
-import { conn } from "@/lib/duck"
+import { useAtom } from "jotai"
+import { type editor, KeyCode, KeyMod } from "monaco-editor"
+import { useCallback, useEffect, useRef } from "react"
+import { useMediaQuery } from "usehooks-ts"
+
+import { queryTextAtom } from "@/atoms/query"
+import { CodeBoxTabs } from "@/components/box/code-box-tabs"
 import { useTheme } from "@/components/theme-provider"
+import { conn } from "@/lib/duck"
+import { useExecuteQuery } from "@/lib/duck/query"
 
 export default function CodeBox() {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
   const [queryText, setQueryText] = useAtom(queryTextAtom)
+
   // const [value, setValue] = useState("")
   // const [view, setView] = useState<ViewUpdate>()
   const { executeQuery } = useExecuteQuery()
   const { theme } = useTheme()
+  const prefereDark = useMediaQuery("(prefers-color-scheme: dark)")
   const monaco = useMonaco()
 
   // const ref = useRef(null)
@@ -74,7 +76,7 @@ export default function CodeBox() {
   //   // 	console.log("focus")
   //   // },
   //   // blur: (evn) => {
-  //   // 	console.log("blur")
+  //   // 	console.log("blur-sm")
   //   // },
   //   keydown: evn => {
   //     if (evn instanceof KeyboardEvent) {
@@ -103,7 +105,7 @@ export default function CodeBox() {
       console.log("[CodeBox] monaco onChange", val)
       setQueryText(val ?? "")
     },
-    [setQueryText]
+    [setQueryText],
   )
 
   // const onChange = useCallback(
@@ -151,7 +153,7 @@ export default function CodeBox() {
                 insertText: s, //'"lodash": "*"',
                 range: range,
               }
-            })
+            }),
           )
 
         return { suggestions }
@@ -206,18 +208,43 @@ export default function CodeBox() {
       monaco?.editor.setTheme("vs-dark")
     } else if (theme === "light") {
       monaco?.editor.setTheme("light")
+    } else {
+      if (prefereDark) {
+        monaco?.editor.setTheme("vs-dark")
+      }
     }
-  }, [monaco?.editor, theme])
+  }, [monaco?.editor, prefereDark, theme])
 
   return (
-    <Editor
-      height="100%"
-      language="sql"
-      value={queryText}
-      onMount={handleEditorDidMount}
-      theme={theme === "dark" ? "vs-dark" : undefined}
-      onChange={onChange2}
-    />
+    <div className="w-full h-full">
+      <CodeBoxTabs />
+      {/* <div className="h-12 relative overflow-hidden">
+        <div className="absolute inset-0 flex gap-1 overflow-auto max-w-full w-full">
+          {Range(0, 100).map(i => (
+            <div className="" key={i}>
+              <ContextMenu>
+                <ContextMenuTrigger>Right click</ContextMenuTrigger>
+                <ContextMenuContent>
+                  <ContextMenuItem>Profile</ContextMenuItem>
+                  <ContextMenuItem>Billing</ContextMenuItem>
+                  <ContextMenuItem>Team</ContextMenuItem>
+                  <ContextMenuItem>Subscription</ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
+            </div>
+          ))}
+        </div>
+      </div> */}
+      <Editor
+        height="100%"
+        // width="100%"
+        language="sql"
+        value={queryText}
+        onMount={handleEditorDidMount}
+        theme={theme === "dark" ? "vs-dark" : theme === "light" ? undefined : prefereDark ? "vs-dark" : undefined}
+        onChange={onChange2}
+      />
+    </div>
   )
 
   // return (
