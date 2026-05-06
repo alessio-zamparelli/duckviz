@@ -12,7 +12,10 @@
     "skipLibCheck": true,
     "typeRoots": [
       "src/types",
-      "node_modules/@types"
+      "node_modules/@types",
+    ],
+    "types": [
+      "wicg-file-system-access",
     ],
     /* Bundler mode */
     "moduleResolution": "bundler",

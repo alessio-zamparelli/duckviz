@@ -81,7 +81,7 @@ export function CodeBoxTabs({ onRun, isMacOs }: { onRun?: () => void; isMacOs?: 
         </div>
         <ScrollBar orientation='horizontal' />
       </ScrollArea>
-      <Button size='sm' variant='default' onClick={onRun} className='sticky right-0'>
+      <Button size='xs' variant='default' onClick={onRun} className='sticky right-0'>
         <PlayIcon />
         <Kbd>{isMacOs ? '⌘' : 'Ctrl'}+ ⏎</Kbd>
       </Button>

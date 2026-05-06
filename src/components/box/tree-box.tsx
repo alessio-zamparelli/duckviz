@@ -92,7 +92,7 @@ export function TreeBox() {
                 onClick: () => setQueryText(s => `${s} '${name}'`),
                 icon: FileIcon,
                 actions: (
-                  <Button size="icon-sm" onClick={() => deleteRegisteredFile(name)}>
+                  <Button size='icon-sm' onClick={() => deleteRegisteredFile(name)}>
                     <XIcon />
                   </Button>
                 ),
@@ -109,16 +109,16 @@ export function TreeBox() {
   }, [])
 
   return (
-    <div className="flex h-full flex-col justify-between pb-2">
-      <div className="">
-        <div className="flex flex-wrap justify-between gap-2 px-2 py-1 shadow-sm">
-          <div className="flex items-center gap-2">
-            <img src="/DuckVIZ-logo.png" alt="DuckViz logo" className="h-8 w-8" />
-            <h1 className="font-bold">DuckViz</h1>
+    <div className='flex h-full flex-col justify-between pb-2'>
+      <div className=''>
+        <div className='flex flex-wrap justify-between gap-2 px-2 py-1 shadow-sm'>
+          <div className='flex items-center gap-2'>
+            <img src='/DuckVIZ-logo.png' alt='DuckViz logo' className='h-8 w-8' />
+            <h1 className='font-bold'>DuckViz</h1>
           </div>
 
-          <div className="flex gap-2">
-            <a href="https://github.com/alessio-zamparelli/duckviz" className="h-8 w-8 p-1">
+          <div className='flex gap-2'>
+            <a href='https://github.com/alessio-zamparelli/duckviz' className='h-8 w-8 p-1'>
               <GithubIcon />
             </a>
             <ModeToggle />
@@ -129,8 +129,8 @@ export function TreeBox() {
       </div>
 
       <Button
-        className="mx-auto w-36"
-        variant="outline"
+        className='mx-auto w-36'
+        variant='outline'
         onClick={() => {
           getTheFile()
         }}>
