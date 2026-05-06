@@ -1,5 +1,5 @@
-import { atomWithImmer } from "jotai-immer"
-import { PlotType } from "plotly.js"
+import { atomWithImmer } from 'jotai-immer'
+import type { PlotType } from 'plotly.js'
 
 // export const tracesAtom = atomWithImmer<Data[]>([])
 export const tracesAtom = atomWithImmer<{ id: string; type?: PlotType; x?: string; y?: string; secondaryY: boolean }[]>(
@@ -7,7 +7,7 @@ export const tracesAtom = atomWithImmer<{ id: string; type?: PlotType; x?: strin
 )
 
 export const PlotTypeArray = [
-  "bar",
+  'bar',
   // "barpolar",
   // "box",
   // "candlestick",
@@ -35,7 +35,7 @@ export const PlotTypeArray = [
   // "pie",
   // "pointcloud",
   // "sankey",
-  "scatter",
+  'scatter',
   // "scatter3d",
   // "scattercarpet",
   // "scattergeo",

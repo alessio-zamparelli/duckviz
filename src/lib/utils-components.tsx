@@ -1,5 +1,5 @@
-import { DataType, Field } from "apache-arrow"
-import { CalendarClockIcon, CalendarIcon, FileQuestionIcon, HashIcon, TypeIcon } from "lucide-react"
+import { DataType, type Field } from 'apache-arrow'
+import { CalendarClockIcon, CalendarIcon, FileQuestionIcon, HashIcon, TypeIcon } from 'lucide-react'
 
 const tsTyped = {
   // s
@@ -81,7 +81,7 @@ export const Field2Typed = (field?: Field) => {
     }
   }
 
-  console.log("[Field2Typed] unknown field datatype", field)
+  console.log('[Field2Typed] unknown field datatype', field)
   return {
     key: field?.name,
     title: (

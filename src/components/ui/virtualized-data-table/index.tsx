@@ -1,40 +1,37 @@
-"use client"
+'use client'
 
 import {
-  ColumnDef,
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  Row,
-  SortDirection,
-  SortingState,
+  type Row,
+  type SortDirection,
+  type SortingState,
   useReactTable,
-} from "@tanstack/react-table"
-import { forwardRef, HTMLAttributes, useState } from "react"
-import { TableVirtuoso } from "react-virtuoso"
+} from '@tanstack/react-table'
+import { type HTMLAttributes, useState } from 'react'
+import { TableVirtuoso } from 'react-virtuoso'
 
-import { TableCell, TableHead, TableRow } from "@/components/ui/table"
-import { cn } from "@/lib/utils"
+import { TableCell, TableHead, TableRow } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 
 // Original Table is wrapped with a <div> (see https://ui.shadcn.com/docs/components/table#radix-:r24:-content-manual),
 // but here we don't want it, so let's use a new component with only <table> tag
-const TableComponent = forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
-  ),
-)
-TableComponent.displayName = "TableComponent"
+function TableComponent({ className, ...props }: React.HTMLAttributes<HTMLTableElement>) {
+  return <table className={cn('w-full caption-bottom text-sm', className)} {...props} />
+}
 
 const TableRowComponent = <TData,>(rows: Row<TData>[]) =>
   function getTableRow(props: HTMLAttributes<HTMLTableRowElement>) {
     // @ts-expect-error data-index is a valid attribute
-    const index = props["data-index"]
+    const index = props['data-index']
     const row = rows[index]
 
     if (!row) return null
 
     return (
-      <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} {...props}>
+      <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'} {...props}>
         {row.getVisibleCells().map(cell => (
           <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
         ))}
@@ -44,23 +41,14 @@ const TableRowComponent = <TData,>(rows: Row<TData>[]) =>
 
 function SortingIndicator({ isSorted }: { isSorted: SortDirection | false }) {
   if (!isSorted) return null
-  return (
-    <div>
-      {
-        {
-          asc: "↑",
-          desc: "↓",
-        }[isSorted]
-      }
-    </div>
-  )
+  return <div>{{ asc: '↑', desc: '↓' }[isSorted]}</div>
 }
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   height?: string
-  className?: HTMLElement["className"]
+  className?: HTMLElement['className']
 }
 
 export function DataTable<TData, TValue>({ columns, data, height, className }: DataTableProps<TData, TValue>) {
@@ -105,8 +93,8 @@ export function DataTable<TData, TValue>({ columns, data, height, className }: D
                       {...{
                         style: header.column.getCanSort()
                           ? {
-                              cursor: "pointer",
-                              userSelect: "none",
+                              cursor: 'pointer',
+                              userSelect: 'none',
                             }
                           : {},
                         onClick: header.column.getToggleSortingHandler(),

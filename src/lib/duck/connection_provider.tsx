@@ -1,10 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/exhaustive-deps */
-import * as duckdb from "@duckdb/duckdb-wasm"
-import * as imm from "immutable"
-import React from "react"
+import type * as duckdb from '@duckdb/duckdb-wasm'
+import imm from 'immutable'
+import React from 'react'
 
-import { useDuckDB, useDuckDBResolver } from "./database_provider"
+import { useDuckDB, useDuckDBResolver } from './database_provider'
 
 type DialerFn = (id?: number) => void
 
@@ -41,6 +41,7 @@ export const DuckDBConnectionProvider: React.FC<DuckDBConnectionProps> = (props:
   }
 
   // Resolve request or remember as pending
+  // biome-ignore lint/correctness/useExhaustiveDependencies: noexplanation
   const dialerCallback = React.useCallback(
     (id?: number) => {
       if (db.value != null) {
@@ -54,6 +55,7 @@ export const DuckDBConnectionProvider: React.FC<DuckDBConnectionProps> = (props:
   )
 
   // Process pending if possible
+  // biome-ignore lint/correctness/useExhaustiveDependencies: noexplanation
   React.useEffect(() => {
     if (db.value == null) {
       return

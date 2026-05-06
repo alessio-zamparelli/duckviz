@@ -1,10 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import * as duckdb from "@duckdb/duckdb-wasm"
-import React, { ReactElement } from "react"
+import * as duckdb from '@duckdb/duckdb-wasm'
+import React, { type ReactElement } from 'react'
 
-import { useDuckDBBundleResolver, useDuckDBLogger } from "./platform_provider"
-import { Resolvable, Resolver } from "./resolvable"
+import { useDuckDBBundleResolver, useDuckDBLogger } from './platform_provider'
+import { Resolvable, type Resolver } from './resolvable'
 
 const setupCtx = React.createContext<Resolvable<duckdb.AsyncDuckDB, duckdb.InstantiationProgress> | null>(null)
 const resolverCtx = React.createContext<Resolver<duckdb.AsyncDuckDB> | null>(null)
@@ -37,6 +37,7 @@ export const DuckDBProvider: React.FC<DuckDBProps> = (props: DuckDBProps) => {
   )
 
   const inFlight = React.useRef<Promise<duckdb.AsyncDuckDB | null> | null>(null)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: no explanation
   const resolver = React.useCallback(async () => {
     // Run only once
     if (inFlight.current) return await inFlight.current
@@ -44,7 +45,7 @@ export const DuckDBProvider: React.FC<DuckDBProps> = (props: DuckDBProps) => {
       // Resolve bundle
       const bundle = await resolveBundle()
       if (bundle == null) {
-        updateSetup(s => s.failWith("invalid bundle"))
+        updateSetup(s => s.failWith('invalid bundle'))
         return null
       }
 

@@ -1,19 +1,19 @@
-import { ColumnDef, RowData } from "@tanstack/react-table"
-import { Field, Table } from "apache-arrow"
-import { useAtomValue } from "jotai"
-import { useState } from "react"
+import type { ColumnDef, RowData } from '@tanstack/react-table'
+import type { Field, Table } from 'apache-arrow'
+import { useAtomValue } from 'jotai'
+import { useState } from 'react'
 
-import { queryAnswerArrowAtom } from "@/atoms/query"
-import PlotBuilder from "@/components/box/plot-builder"
-import { DataTable } from "@/components/ui/data-table"
-import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Field2Typed } from "@/lib/utils-components"
+import { queryAnswerArrowAtom } from '@/atoms/query'
+import PlotBuilder from '@/components/box/plot-builder'
+import { DataTable } from '@/components/ui/data-table'
+import { DataTableColumnHeader } from '@/components/ui/data-table/data-table-column-header'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Field2Typed } from '@/lib/utils-components'
 
 export function ResultBox() {
   const queryAnswerArrow = useAtomValue(queryAnswerArrowAtom)
-  const [activeTab, setActiveTab] = useState("table")
+  const [activeTab, setActiveTab] = useState('table')
 
   if (!queryAnswerArrow) {
     return <p>nothing to show</p>
@@ -21,7 +21,7 @@ export function ResultBox() {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="h-[calc(100%-4px)]">
-      <div className="flex justify-center mt-1">
+      <div className="mt-1 flex justify-center">
         <TabsList className="">
           <TabsTrigger value="table">Table result</TabsTrigger>
           <TabsTrigger value="plot">Plot</TabsTrigger>
@@ -34,7 +34,7 @@ export function ResultBox() {
           <ScrollBar />
         </ScrollArea>
       </TabsContent>
-      <TabsContent value="plot" className="h-[calc(100%-48px)] flex flex-col">
+      <TabsContent value="plot" className="flex h-[calc(100%-48px)] flex-col">
         <PlotBuilder data={queryAnswerArrow} />
       </TabsContent>
     </Tabs>
@@ -67,7 +67,7 @@ export function ResultBox() {
 const c = (field: Field): ColumnDef<RowData> => {
   return {
     accessorKey: field.name,
-    header: ({ column }) => <DataTableColumnHeader column={column} title={Field2Typed(field).title} />,
+    header: ({ column }) => <DataTableColumnHeader column={column} columnTitle={Field2Typed(field).title} />,
     cell: ({ row }) => Field2Typed(field).formatter(row.getValue(field.name)),
   }
 }

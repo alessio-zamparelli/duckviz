@@ -1,28 +1,26 @@
-import { Table } from "apache-arrow"
-import { useAtom } from "jotai"
-import { PlusIcon, TrashIcon } from "lucide-react"
-import { nanoid } from "nanoid"
-import { Data } from "plotly.js"
-import { useRef } from "react"
-import createPlotlyComponent from "react-plotly.js/factory"
+import type { Table } from 'apache-arrow'
+import { useAtom } from 'jotai'
+import { PlusIcon, TrashIcon } from 'lucide-react'
+import { nanoid } from 'nanoid'
+import type { Data } from 'plotly.js'
+import { useRef } from 'react'
+import { default as createPlotlyComponent } from 'react-plotly.js/factory'
 
-import { PlotTypeArray, tracesAtom } from "@/atoms/plot.js"
-import { queryAnswerArrowAtom } from "@/atoms/query.js"
-import { isPlotPanelActiveAtom } from "@/atoms/state.js"
+import { PlotTypeArray, tracesAtom } from '@/atoms/plot.js'
+import { queryAnswerArrowAtom } from '@/atoms/query.js'
+import { isPlotPanelActiveAtom } from '@/atoms/state.js'
 // function getPlot(type: string, x: string, y: string){}
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox.js"
-import DraggableWrapper from "@/components/ui/dragble-wrapper"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { defConfig, defLayout } from "@/lib/plotly-config.js"
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox.js'
+import DraggableWrapper from '@/components/ui/dragble-wrapper'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Plotly from '@/lib/plotly'
+import { defConfig, defLayout } from '@/lib/plotly-config.js'
 // import { getPalette } from "@/lib/utils"
 // import { useResizeObserver } from "usehooks-ts"
-import { Field2Typed } from "@/lib/utils-components"
-
-// @ts-expect-error non ho dichiarato il file
-import Plotly from "../../lib/plotly.js"
+import { Field2Typed } from '@/lib/utils-components'
 
 export default function PlotBuilder({ data }: { data: Table }) {
   const Plot = createPlotlyComponent(Plotly)
@@ -127,9 +125,9 @@ export default function PlotBuilder({ data }: { data: Table }) {
   // }, [data, traces, xTrace])
 
   return (
-    <div className="grow h-full">
+    <div className="h-full grow">
       <Plot
-        className="grow h-full w-full"
+        className="h-full w-full grow"
         useResizeHandler
         data={
           traces
@@ -145,7 +143,7 @@ export default function PlotBuilder({ data }: { data: Table }) {
                     Field2Typed(data.schema.fields.find(e => e.name === t.y)).typed,
                   ),
                   name: t.y,
-                  yaxis: t.secondaryY && "y2",
+                  yaxis: t.secondaryY && 'y2',
                 }) as Data,
             )
           // traces.map(
@@ -215,7 +213,7 @@ export function PlotConfig() {
 
   return (
     <DraggableWrapper
-      title={"Plot config"}
+      title={'Plot config'}
       width="min-w-xl"
       height="auto"
       fullScreenWidth="60%"
@@ -239,7 +237,7 @@ export function PlotConfig() {
         </Select>
       </Label> */}
       {traces.map((t, idx) => (
-        <Card key={t.id} className="flex gap-3 items-center p-2 my-1">
+        <Card key={t.id} className="my-1 flex items-center gap-3 p-2">
           <CardHeader className="p-0">
             <CardTitle>
               <Label>Trace {idx + 1} </Label>
@@ -247,10 +245,14 @@ export function PlotConfig() {
             {/* <CardDescription>Card Description</CardDescription> */}
           </CardHeader>
 
-          <CardContent className="flex items-center p-0 gap-1 grow">
+          <CardContent className="flex grow items-center gap-1 p-0">
             <Select
               value={t.type}
-              onValueChange={v => setTraces(t => void (t[idx] = { ...t?.[idx], type: v as never }))}>
+              onValueChange={v =>
+                setTraces(t => {
+                  t[idx] = { ...t?.[idx], type: v as never }
+                })
+              }>
               <SelectTrigger>
                 <SelectValue placeholder="Type?" />
               </SelectTrigger>
@@ -263,7 +265,13 @@ export function PlotConfig() {
               </SelectContent>
             </Select>
 
-            <Select value={t.x} onValueChange={v => setTraces(t => void (t[idx] = { ...t?.[idx], x: v }))}>
+            <Select
+              value={t.x}
+              onValueChange={v =>
+                setTraces(t => {
+                  t[idx] = { ...t?.[idx], x: v }
+                })
+              }>
               <SelectTrigger>
                 <SelectValue placeholder="X?" />
               </SelectTrigger>
@@ -276,7 +284,13 @@ export function PlotConfig() {
               </SelectContent>
             </Select>
 
-            <Select value={t.y} onValueChange={v => setTraces(t => void (t[idx] = { ...t?.[idx], y: v }))}>
+            <Select
+              value={t.y}
+              onValueChange={v =>
+                setTraces(t => {
+                  t[idx] = { ...t?.[idx], y: v }
+                })
+              }>
               <SelectTrigger>
                 <SelectValue placeholder="Y?" />
               </SelectTrigger>
@@ -291,13 +305,17 @@ export function PlotConfig() {
 
             <div className="flex items-center space-x-2">
               <Checkbox
-                id={"secondaryY-" + idx}
+                id={`secondaryY-${idx}`}
                 checked={t.secondaryY}
-                onCheckedChange={c => setTraces(t => void (t[idx] = { ...t?.[idx], secondaryY: !!c }))}
+                onCheckedChange={c =>
+                  setTraces(t => {
+                    t[idx] = { ...t?.[idx], secondaryY: !!c }
+                  })
+                }
               />
               <label
-                htmlFor={"secondaryY-" + idx}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                htmlFor={`secondaryY-${idx}`}
+                className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Secondary Y
               </label>
             </div>

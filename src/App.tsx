@@ -1,8 +1,8 @@
-import { ActivePanelSelector } from "@/components/active-panel"
-import { PlotConfig } from "@/components/box/plot-builder"
-import { TreeBox } from "@/components/box/tree-box"
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
-import { Toaster } from "@/components/ui/sonner"
+import { ActivePanelSelector } from '@/components/active-panel'
+import { PlotConfig } from '@/components/box/plot-builder'
+import { TreeBox } from '@/components/box/tree-box'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
+import { Toaster } from '@/components/ui/sonner'
 
 export default function App() {
   // async function handleFiles(files) {
@@ -65,13 +65,13 @@ export default function App() {
     <>
       {/* <NavBar /> */}
 
-      <ResizablePanelGroup direction="horizontal" className="h-full">
+      <ResizablePanelGroup orientation="horizontal" className="h-full">
         <ResizablePanel defaultSize={20}>
           <TreeBox />
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel defaultSize={80}>
-          <ResizablePanelGroup direction="vertical">
+          <ResizablePanelGroup orientation="vertical">
             <ResizablePanel defaultSize={50}>
               <ActivePanelSelector position="top" />
             </ResizablePanel>

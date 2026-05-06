@@ -1,10 +1,10 @@
-import { useAtom, useSetAtom } from "jotai"
-import { ScanEyeIcon, TableIcon } from "lucide-react"
-import { toast } from "sonner"
+import { useAtom, useSetAtom } from 'jotai'
+import { ScanEyeIcon, TableIcon } from 'lucide-react'
+import { toast } from 'sonner'
 
-import { queryAnswerArrowAtom, queryTextAtom } from "@/atoms/query"
-import { isLoadingAtom, treeAtom } from "@/atoms/state"
-import { conn } from "@/lib/duck"
+import { queryAnswerArrowAtom, queryTextAtom } from '@/atoms/query'
+import { isLoadingAtom, treeAtom } from '@/atoms/state'
+import { conn } from '@/lib/duck'
 
 export function useExecuteQuery() {
   const setIsLoading = useSetAtom(isLoadingAtom)
@@ -19,17 +19,17 @@ export function useExecuteQuery() {
       )
       .then(r => {
         const a = r.toArray().map(e => e.toJSON())
-        console.log("res", a)
+        console.log('res', a)
 
         const tables = a.map(e => ({ name: e.name, schema: e.schema, type: e.type }))
         console.table(tables)
 
         setTables(s => {
-          s.find(e => e.id === "memory")!.children = tables.map(t => ({
+          s.find(e => e.id === 'memory')!.children = tables.map(t => ({
             id: t.name,
             name: t.name,
-            onClick: () => setQueryText(s => s + " '" + t.name + "'"),
-            icon: t.type === "BASE TABLE" ? TableIcon : t.type === "VIEW" ? ScanEyeIcon : undefined, //<TableIcon /> : <></>,
+            onClick: () => setQueryText(s => `${s} '${t.name}'`),
+            icon: t.type === 'BASE TABLE' ? TableIcon : t.type === 'VIEW' ? ScanEyeIcon : undefined, //<TableIcon /> : <></>,
           }))
         })
       })
@@ -38,15 +38,15 @@ export function useExecuteQuery() {
   function executeQuery(text?: string) {
     setIsLoading(true)
 
-    console.log("[executeQuery] queryText", queryText)
-    console.log("[executeQuery] text", text)
+    console.log('[executeQuery] queryText', queryText)
+    console.log('[executeQuery] text', text)
 
     conn
       .query(text ?? queryText)
       .then(r => {
         setQueryAnswerArrow(r)
-        console.log("query answer datatype", r.schema.fields)
-        console.log("query answer values", JSON.parse(r.toString()))
+        console.log('query answer datatype', r.schema.fields)
+        console.log('query answer values', JSON.parse(r.toString()))
         // console.table(
         //   r.schema.fields.map(t => ({
         //     name: t.name,
@@ -69,9 +69,9 @@ export function useExecuteQuery() {
       .then(() => setIsLoading(false))
       .catch(error => {
         if (error instanceof Error) {
-          toast("ERRORE", { description: error.message })
+          toast('ERRORE', { description: error.message })
         } else {
-          toast("ERRORE")
+          toast('ERRORE')
         }
       })
   }

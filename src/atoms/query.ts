@@ -1,11 +1,10 @@
-import { Table } from "apache-arrow"
-import { produce } from "immer"
-import { atom } from "jotai"
-import { atomWithStorage } from "jotai/utils"
-import { nanoid } from "nanoid"
-import { type Dictionary } from "ts-essentials"
-
-import { QUERY_TYPE } from "@/types/query"
+import type { Table } from 'apache-arrow'
+import { produce } from 'immer'
+import { atom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
+import { nanoid } from 'nanoid'
+import type { Dictionary } from 'ts-essentials'
+import type { QUERY_TYPE } from '@/types/query'
 
 const defQuery = `select 
   'lineY' as type, 
@@ -34,14 +33,14 @@ const defQuery = `select
 //   return derivedAtom
 // }
 
-export const queryListIdxAtom = atomWithStorage("queryListIdxAtom", 0, undefined, { getOnInit: true })
+export const queryListIdxAtom = atomWithStorage('queryListIdxAtom', 0, undefined, { getOnInit: true })
 export const queryListAtom = atomWithStorage<QUERY_TYPE[]>(
-  "queryListAtom",
-  [{ id: nanoid(), title: "query1", text: defQuery }],
+  'queryListAtom',
+  [{ id: nanoid(), title: 'query1', text: defQuery }],
   undefined,
   {
     getOnInit: true,
-  }
+  },
 )
 
 export const queryTextAtom = atom(
@@ -49,13 +48,13 @@ export const queryTextAtom = atom(
   (get, set, newText: string | ((s: string) => string)) =>
     set(queryListAtom, s =>
       produce(s, draftState => {
-        if (typeof newText === "function") {
+        if (typeof newText === 'function') {
           draftState[get(queryListIdxAtom)].text = newText(draftState[get(queryListIdxAtom)].text)
         } else {
           draftState[get(queryListIdxAtom)].text = newText
         }
-      })
-    )
+      }),
+    ),
 )
 // export const queryTextAtom = atom(
 //   async get => {

@@ -21,7 +21,7 @@ export class Resolvable<Value, Progress = null, Error = string> {
   }
 
   public resolving(): boolean {
-    return this.status != ResolvableStatus.NONE
+    return this.status !== ResolvableStatus.NONE
   }
   public completeWith(value: Value, progress: Progress | null = null): Resolvable<Value, Progress, Error> {
     return new Resolvable(ResolvableStatus.COMPLETED, value, this.error, progress)

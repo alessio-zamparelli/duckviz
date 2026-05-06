@@ -1,17 +1,17 @@
-import { DuckDBDataProtocol } from "@duckdb/duckdb-wasm"
-import { useAtom, useSetAtom } from "jotai"
-import { FileIcon, FileUpIcon, XIcon } from "lucide-react"
-import { useEffect } from "react"
-import { toast } from "sonner"
+import { DuckDBDataProtocol } from '@duckdb/duckdb-wasm'
+import { useAtom, useSetAtom } from 'jotai'
+import { FileIcon, FileUpIcon, XIcon } from 'lucide-react'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
 
-import { queryTextAtom } from "@/atoms/query"
-import { treeAtom } from "@/atoms/state"
-import { ModeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
-import { TreeView } from "@/components/ui/tree-view"
-import { db } from "@/lib/duck"
-import { GithubIcon } from "@/lib/github"
-import { deleteFile, filesEntries, setFile } from "@/lib/store"
+import { queryTextAtom } from '@/atoms/query'
+import { treeAtom } from '@/atoms/state'
+import { ModeToggle } from '@/components/theme-toggle'
+import { Button } from '@/components/ui/button'
+import { TreeView } from '@/components/ui/tree-view'
+import { db } from '@/lib/duck'
+import { GithubIcon } from '@/lib/github'
+import { deleteFile, filesEntries, setFile } from '@/lib/store'
 
 export function TreeBox() {
   const [tables, setTables] = useAtom(treeAtom)
@@ -40,27 +40,25 @@ export function TreeBox() {
   // }, [setQueryText, setTables])
 
   async function getTheFile() {
-    if (!("showOpenFilePicker" in window)) return alert("not supported by your browser")
+    if (!('showOpenFilePicker' in window)) return alert('not supported by your browser')
 
     const [fileHandle] = await window.showOpenFilePicker()
     const file = await fileHandle.getFile()
 
-    console.log("loaded", file.name)
+    console.log('loaded', file.name)
 
     await db.registerFileHandle(file.name, file, DuckDBDataProtocol.BROWSER_FILEREADER, true)
 
-    toast("File loaded " + file.name)
+    toast(`File loaded ${file.name}`)
 
     await setFile(file.name, file)
 
     setTables(s => {
-      s
-        .find(e => e.id === "external")
-        ?.children?.push({
-          id: file.name,
-          name: file.name,
-          onClick: () => setQueryText(s => s + " '" + file.name + "'"),
-        })
+      s.find(e => e.id === 'external')?.children?.push({
+        id: file.name,
+        name: file.name,
+        onClick: () => setQueryText(s => `${s} '${file.name}'`),
+      })
     })
   }
 
@@ -68,18 +66,19 @@ export function TreeBox() {
     await deleteFile(fileName)
 
     setTables(s => {
-      s.find(e => e.id === "external")!.children = s
-        .find(e => e.id === "external")
+      s.find(e => e.id === 'external')!.children = s
+        .find(e => e.id === 'external')
         ?.children?.filter(e => e.name !== fileName)
     })
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: no explanation
   useEffect(() => {
     const registerIndexedTables = async () => {
       const entries = await filesEntries()
-      console.log("🚀 - file: tree-box.tsx:65 - ; - entries:", entries)
+      console.log('🚀 - file: tree-box.tsx:65 - ; - entries:', entries)
 
-      const actualTables = tables.find(e => e.id === "external")!.children!.map(e => e.name)
+      const actualTables = tables.find(e => e.id === 'external')!.children!.map(e => e.name)
 
       for (const [name, file] of entries) {
         if (!actualTables.includes(name)) {
@@ -87,19 +86,17 @@ export function TreeBox() {
           await db.registerFileHandle(name, file, DuckDBDataProtocol.BROWSER_FILEREADER, true)
           setTables(s => {
             if (!actualTables.includes(name))
-              s
-                .find(e => e.id === "external")
-                ?.children?.push({
-                  id: name,
-                  name: name,
-                  onClick: () => setQueryText(s => s + " '" + name + "'"),
-                  icon: FileIcon,
-                  actions: (
-                    <Button size="icon-sm" onClick={() => deleteRegisteredFile(name)}>
-                      <XIcon />
-                    </Button>
-                  ),
-                })
+              s.find(e => e.id === 'external')?.children?.push({
+                id: name,
+                name: name,
+                onClick: () => setQueryText(s => `${s} '${name}'`),
+                icon: FileIcon,
+                actions: (
+                  <Button size="icon-sm" onClick={() => deleteRegisteredFile(name)}>
+                    <XIcon />
+                  </Button>
+                ),
+              })
           })
         }
       }
@@ -112,9 +109,9 @@ export function TreeBox() {
   }, [])
 
   return (
-    <div className="h-full flex flex-col justify-between pb-2">
+    <div className="flex h-full flex-col justify-between pb-2">
       <div className="">
-        <div className="flex flex-wrap gap-2 px-2 py-1 shadow-sm justify-between">
+        <div className="flex flex-wrap justify-between gap-2 px-2 py-1 shadow-sm">
           <div className="flex items-center gap-2">
             <img src="/DuckVIZ-logo.png" alt="DuckViz logo" className="h-8 w-8" />
             <h1 className="font-bold">DuckViz</h1>
@@ -132,7 +129,7 @@ export function TreeBox() {
       </div>
 
       <Button
-        className="w-36 mx-auto"
+        className="mx-auto w-36"
         variant="outline"
         onClick={() => {
           getTheFile()

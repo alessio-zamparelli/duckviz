@@ -1,11 +1,12 @@
 // https://github.com/nishansanjuka/react-drag-card/blob/main/components/dragble-wrapper.tsx
 
-import { ChevronUp, Maximize, Minimize } from "lucide-react"
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react"
+import { ChevronUp, Maximize, Minimize } from 'lucide-react'
+import type React from 'react'
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 interface DraggableWrapperProps {
   children: ReactNode
@@ -26,26 +27,26 @@ interface DraggableWrapperProps {
   hidden?: boolean
 }
 
-type ResizeHandle = "s" | "e" | "w" | "se" | "sw" | null
+type ResizeHandle = 's' | 'e' | 'w' | 'se' | 'sw' | null
 
 const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
   children,
   title,
-  className = "",
+  className = '',
   defaultPosition = { x: 0, y: 0 },
   onPositionChange,
   onFullScreenChange,
   onMinimizeChange,
-  width = "w-64",
-  height = "auto",
-  fullScreenWidth = "100%",
-  fullScreenHeight = "100%",
+  width = 'w-64',
+  height = 'auto',
+  fullScreenWidth = '100%',
+  fullScreenHeight = '100%',
   headerContent,
   maximizeButton = <Maximize size={20} />,
   minimizeButton = <Minimize size={20} />,
   hidden = false,
   restoreButton = (
-    <Button className="max-w-sm cursor-pointer justify-start!">
+    <Button className="justify-start! max-w-sm cursor-pointer">
       <span className="truncate">Restore {title}</span>
       <ChevronUp className="" />
     </Button>
@@ -86,13 +87,13 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
         }
 
         const onMouseUp = () => {
-          document.removeEventListener("mousemove", onMouseMove)
-          document.removeEventListener("mouseup", onMouseUp)
+          document.removeEventListener('mousemove', onMouseMove)
+          document.removeEventListener('mouseup', onMouseUp)
           setIsDragging(false)
         }
 
-        document.addEventListener("mousemove", onMouseMove)
-        document.addEventListener("mouseup", onMouseUp)
+        document.addEventListener('mousemove', onMouseMove)
+        document.addEventListener('mouseup', onMouseUp)
         setIsDragging(true)
       }
     },
@@ -120,21 +121,21 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
 
           // Handle resizing based on the edge being dragged
           switch (handle) {
-            case "e":
+            case 'e':
               newWidth = Math.max(200, startWidth + deltaX)
               break
-            case "w":
+            case 'w':
               newWidth = Math.max(200, startWidth - deltaX)
               newX = startPosition.x + startWidth - newWidth
               break
-            case "s":
+            case 's':
               newHeight = Math.max(100, startHeight + deltaY)
               break
-            case "se":
+            case 'se':
               newWidth = Math.max(200, startWidth + deltaX)
               newHeight = Math.max(100, startHeight + deltaY)
               break
-            case "sw":
+            case 'sw':
               newWidth = Math.max(200, startWidth - deltaX)
               newHeight = Math.max(100, startHeight + deltaY)
               newX = startPosition.x + startWidth - newWidth
@@ -163,13 +164,13 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
         }
 
         const onMouseUp = () => {
-          document.removeEventListener("mousemove", onMouseMove)
-          document.removeEventListener("mouseup", onMouseUp)
+          document.removeEventListener('mousemove', onMouseMove)
+          document.removeEventListener('mouseup', onMouseUp)
           setIsResizing(null)
         }
 
-        document.addEventListener("mousemove", onMouseMove)
-        document.addEventListener("mouseup", onMouseUp)
+        document.addEventListener('mousemove', onMouseMove)
+        document.addEventListener('mouseup', onMouseUp)
         setIsResizing(handle)
       }
     },
@@ -192,6 +193,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
     }
   }, [isFullScreen, isMinimized, lastPosition, position, onFullScreenChange, onMinimizeChange, onPositionChange])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: explanation
   const toggleMinimize = useCallback(() => {
     if (isFullScreen) {
       setIsFullScreen(false)
@@ -201,17 +203,16 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
     }
     setIsMinimized(!isMinimized)
     onMinimizeChange?.(!isMinimized)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFullScreen, lastPosition, onFullScreenChange, onMinimizeChange, onPositionChange])
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isFullScreen) {
+      if (e.key === 'Escape' && isFullScreen) {
         toggleFullScreen()
       }
     }
-    document.addEventListener("keydown", handleEscape)
-    return () => document.removeEventListener("keydown", handleEscape)
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
   }, [isFullScreen, toggleFullScreen])
 
   useEffect(() => {
@@ -219,8 +220,8 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
       setViewportSize({ width: window.innerWidth, height: window.innerHeight })
     }
     updateViewportSize()
-    window.addEventListener("resize", updateViewportSize)
-    return () => window.removeEventListener("resize", updateViewportSize)
+    window.addEventListener('resize', updateViewportSize)
+    return () => window.removeEventListener('resize', updateViewportSize)
   }, [])
 
   const renderHeader = () => {
@@ -240,26 +241,11 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
   }
 
   const resizeHandles = [
-    {
-      handle: "s",
-      className: "absolute bottom-0 left-0 right-0 h-1 cursor-s-resize",
-    },
-    {
-      handle: "e",
-      className: "absolute top-0 right-0 bottom-0 w-1 cursor-e-resize",
-    },
-    {
-      handle: "w",
-      className: "absolute top-0 left-0 bottom-0 w-1 cursor-w-resize",
-    },
-    {
-      handle: "se",
-      className: "absolute bottom-0 right-0 h-2 w-2 cursor-se-resize",
-    },
-    {
-      handle: "sw",
-      className: "absolute bottom-0 left-0 h-2 w-2 cursor-sw-resize",
-    },
+    { handle: 's', className: 'absolute bottom-0 left-0 right-0 h-1 cursor-s-resize' },
+    { handle: 'e', className: 'absolute top-0 right-0 bottom-0 w-1 cursor-e-resize' },
+    { handle: 'w', className: 'absolute top-0 left-0 bottom-0 w-1 cursor-w-resize' },
+    { handle: 'se', className: 'absolute bottom-0 right-0 h-2 w-2 cursor-se-resize' },
+    { handle: 'sw', className: 'absolute bottom-0 left-0 h-2 w-2 cursor-sw-resize' },
   ]
 
   return (
@@ -267,21 +253,21 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
       <div
         ref={cardRef}
         style={{
-          position: "fixed",
+          position: 'fixed',
           left: isFullScreen ? 0 : `${position.x}px`,
           top: isFullScreen ? 0 : `${position.y}px`,
-          width: isFullScreen ? fullScreenWidth : customSize.width ? `${customSize.width}px` : "auto",
+          width: isFullScreen ? fullScreenWidth : customSize.width ? `${customSize.width}px` : 'auto',
           height: isFullScreen ? fullScreenHeight : customSize.height ? `${customSize.height}px` : height,
-          padding: "10px",
-          touchAction: "none",
-          display: isMinimized ? "none" : "block",
+          padding: '10px',
+          touchAction: 'none',
+          display: isMinimized ? 'none' : 'block',
           zIndex: 40,
         }}>
         <Card
           className={cn(
-            "z-40 select-none transition-shadow",
-            (isDragging || isResizing) && !isFullScreen && "shadow-lg",
-            isFullScreen ? "h-full w-full" : width,
+            'z-40 select-none transition-shadow',
+            (isDragging || isResizing) && !isFullScreen && 'shadow-lg',
+            isFullScreen ? 'h-full w-full' : width,
             className,
           )}>
           <div onPointerDown={onMouseDown} className="cursor-move">
@@ -294,7 +280,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
               resizeHandles.map(({ handle, className }) => (
                 <div
                   key={handle}
-                  className={cn("bg-transparent hover:bg-gray-200", className)}
+                  className={cn('bg-transparent hover:bg-gray-200', className)}
                   onPointerDown={e => startResize(e, handle as ResizeHandle)}
                 />
               ))}
@@ -303,7 +289,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
       </div>
 
       {isMinimized && (
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className="fixed right-4 bottom-4 z-50">
           {restoreButton && <div onClick={() => setIsMinimized(false)}>{restoreButton}</div>}
         </div>
       )}

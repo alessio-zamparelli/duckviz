@@ -1,7 +1,7 @@
-import { createStore, del, entries, get, keys, set } from "idb-keyval"
+import { createStore, del, entries, get, keys, set } from 'idb-keyval'
 
 // const customStore3 = createStore('db3', 'keyval');
-const filesStore = createStore("files", "keyval")
+const filesStore = createStore('files', 'keyval')
 
 export const setFile = (name: IDBValidKey, file: File) => set(name, file, filesStore)
 export const getFile = (name: IDBValidKey) => get(name, filesStore)

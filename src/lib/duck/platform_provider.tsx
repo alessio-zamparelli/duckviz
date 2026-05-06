@@ -1,9 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import * as duckdb from "@duckdb/duckdb-wasm"
-import React from "react"
+import * as duckdb from '@duckdb/duckdb-wasm'
+import React from 'react'
 
-import { Resolvable, Resolver } from "./resolvable"
+import { Resolvable, type Resolver } from './resolvable'
 
 type PlatformProps = {
   children: React.ReactElement | React.ReactElement[]
@@ -22,6 +22,7 @@ export const DuckDBPlatform: React.FC<PlatformProps> = (props: PlatformProps) =>
   const [bundle, setBundle] = React.useState<Resolvable<duckdb.DuckDBBundle>>(new Resolvable())
 
   const inFlight = React.useRef<Promise<duckdb.DuckDBBundle | null> | null>(null)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: no explanation
   const resolver = React.useCallback(async () => {
     if (bundle.error) return null
     if (bundle.value) return bundle.value
@@ -29,7 +30,7 @@ export const DuckDBPlatform: React.FC<PlatformProps> = (props: PlatformProps) =>
     inFlight.current = (async () => {
       try {
         const params = new URLSearchParams(window.location.search)
-        const bundleName = params.get("bundle") as keyof duckdb.DuckDBBundles | null
+        const bundleName = params.get('bundle') as keyof duckdb.DuckDBBundles | null
         setBundle(b => b.updateRunning())
 
         const bundle = bundleName !== null ? props.bundles[bundleName] : null
