@@ -19,10 +19,7 @@ export function useExecuteQuery() {
       )
       .then(r => {
         const a = r.toArray().map(e => e.toJSON())
-        console.log('res', a)
-
         const tables = a.map(e => ({ name: e.name, schema: e.schema, type: e.type }))
-        console.table(tables)
 
         setTables(s => {
           s.find(e => e.id === 'memory')!.children = tables.map(t => ({
@@ -38,33 +35,9 @@ export function useExecuteQuery() {
   function executeQuery(text?: string) {
     setIsLoading(true)
 
-    console.log('[executeQuery] queryText', queryText)
-    console.log('[executeQuery] text', text)
-
     conn
       .query(text ?? queryText)
-      .then(r => {
-        setQueryAnswerArrow(r)
-        console.log('query answer datatype', r.schema.fields)
-        console.log('query answer values', JSON.parse(r.toString()))
-        // console.table(
-        //   r.schema.fields.map(t => ({
-        //     name: t.name,
-        //     type: t.type,
-        //     // isInt: arrow.DataType.isInt(t.type),
-        //     // isTimestamp: arrow.DataType.isTimestamp(t.type),
-        //     // typeId: t.typeId,
-        //     // nullable: t.nullable
-        //   }))
-        // )
-        // setQueryAnswer(
-        // 	JSON.parse(
-        // 		JSON.stringify(r.toArray(), (_, v) =>
-        // 			typeof v === "bigint" ? v.toString() : v
-        // 		)
-        // 	)
-        // )
-      })
+      .then(r => setQueryAnswerArrow(r))
       .then(() => updateTree())
       .then(() => setIsLoading(false))
       .catch(error => {

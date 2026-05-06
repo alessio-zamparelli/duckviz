@@ -224,58 +224,24 @@ export default function CodeBox() {
   }, [monaco?.editor, prefereDark, theme])
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col overflow-hidden">
+    <div className='flex w-full flex-col'>
       <CodeBoxTabs
         onRun={() => {
           runSql(editorRef.current)
         }}
         isMacOs={isMacOs}
       />
-      {/* <div className="h-12 relative overflow-hidden">
-        <div className="absolute inset-0 flex gap-1 overflow-auto max-w-full w-full">
-          {Range(0, 100).map(i => (
-            <div className="" key={i}>
-              <ContextMenu>
-                <ContextMenuTrigger>Right click</ContextMenuTrigger>
-                <ContextMenuContent>
-                  <ContextMenuItem>Profile</ContextMenuItem>
-                  <ContextMenuItem>Billing</ContextMenuItem>
-                  <ContextMenuItem>Team</ContextMenuItem>
-                  <ContextMenuItem>Subscription</ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
-            </div>
-          ))}
-        </div>
-      </div> */}
-      <div className="relative min-h-0 w-full flex-1 overflow-hidden">
-        <Editor
-          height="100%"
-          // width="100%"
-          language="sql"
-          value={queryText}
-          onMount={handleEditorDidMount}
-          theme={theme === 'dark' ? 'vs-dark' : theme === 'light' ? undefined : prefereDark ? 'vs-dark' : undefined}
-          onChange={onChange2}
-        />
-      </div>
+
+      <Editor
+        className='grow'
+        height='100%'
+        // width="100%"
+        language='sql'
+        value={queryText}
+        onMount={handleEditorDidMount}
+        theme={theme === 'dark' ? 'vs-dark' : theme === 'light' ? undefined : prefereDark ? 'vs-dark' : undefined}
+        onChange={onChange2}
+      />
     </div>
   )
-
-  // return (
-  //   <CodeMirror
-  //     basicSetup={{ autocompletion: true }}
-  //     value={queryText}
-  //     className="h-full w-full grow"
-  //     height="100%"
-  //     // height={height + "px"}
-  //     theme="dark"
-  //     extensions={[
-  //       sql({ dialect: PostgreSQL }),
-  //       eventExt2,
-  //       // autocompletion({ override: [myCompletions] })
-  //     ]}
-  //     onChange={onChange}
-  //   />
-  // )
 }

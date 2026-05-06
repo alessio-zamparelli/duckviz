@@ -15,26 +15,24 @@ export function ResultBox() {
   const queryAnswerArrow = useAtomValue(queryAnswerArrowAtom)
   const [activeTab, setActiveTab] = useState('table')
 
-  if (!queryAnswerArrow) {
-    return <p>nothing to show</p>
-  }
+  if (!queryAnswerArrow) return <p>nothing to show</p>
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="h-[calc(100%-4px)]">
-      <div className="mt-1 flex justify-center">
-        <TabsList className="">
-          <TabsTrigger value="table">Table result</TabsTrigger>
-          <TabsTrigger value="plot">Plot</TabsTrigger>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className='h-[calc(100%-4px)]'>
+      <div className='mt-1 flex justify-center'>
+        <TabsList className=''>
+          <TabsTrigger value='table'>Table result</TabsTrigger>
+          <TabsTrigger value='plot'>Plot</TabsTrigger>
         </TabsList>
       </div>
 
-      <TabsContent value="table" className="ciao">
+      <TabsContent value='table' className='ciao'>
         <ScrollArea>
           <DataTable columns={Table2Column(queryAnswerArrow)} data={Table2Data(queryAnswerArrow)} />
           <ScrollBar />
         </ScrollArea>
       </TabsContent>
-      <TabsContent value="plot" className="flex h-[calc(100%-48px)] flex-col">
+      <TabsContent value='plot' className='flex h-[calc(100%-48px)] flex-col'>
         <PlotBuilder data={queryAnswerArrow} />
       </TabsContent>
     </Tabs>

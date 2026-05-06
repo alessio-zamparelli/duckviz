@@ -46,9 +46,9 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
   minimizeButton = <Minimize size={20} />,
   hidden = false,
   restoreButton = (
-    <Button className="justify-start! max-w-sm cursor-pointer">
-      <span className="truncate">Restore {title}</span>
-      <ChevronUp className="" />
+    <Button className='justify-start! max-w-sm cursor-pointer'>
+      <span className='truncate'>Restore {title}</span>
+      <ChevronUp className='' />
     </Button>
   ),
 }) => {
@@ -225,16 +225,13 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
   }, [])
 
   const renderHeader = () => {
-    if (headerContent) {
-      return headerContent
-    }
-
+    if (headerContent) return headerContent
     return (
-      <CardHeader className="flex flex-row items-center justify-between space-x-2 p-0 px-6">
-        {title && <CardTitle className="translate-y-1 truncate text-base">{title}</CardTitle>}
-        <div className="flex space-x-2">
-          {minimizeButton && <div onClick={toggleMinimize}>{minimizeButton}</div>}
-          {maximizeButton && <div onClick={toggleFullScreen}>{maximizeButton}</div>}
+      <CardHeader className='flex flex-row items-center justify-between space-x-2 p-0 px-6'>
+        {title && <CardTitle className='translate-y-1 truncate text-base'>{title}</CardTitle>}
+        <div className='flex space-x-2'>
+          {minimizeButton && !isMinimized && <div onClick={toggleMinimize}>{minimizeButton}</div>}
+          {maximizeButton && isMinimized && <div onClick={toggleFullScreen}>{maximizeButton}</div>}
         </div>
       </CardHeader>
     )
@@ -265,15 +262,15 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
         }}>
         <Card
           className={cn(
-            'z-40 select-none transition-shadow',
+            'z-40 select-none gap-1 py-4 transition-shadow',
             (isDragging || isResizing) && !isFullScreen && 'shadow-lg',
             isFullScreen ? 'h-full w-full' : width,
             className,
           )}>
-          <div onPointerDown={onMouseDown} className="cursor-move">
+          <div onPointerDown={onMouseDown} className='cursor-move'>
             {renderHeader()}
           </div>
-          <CardContent className="relative mt-2">
+          <CardContent className='relative mt-2 px-4'>
             {children}
             {!isFullScreen &&
               !isMinimized &&
@@ -289,7 +286,7 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
       </div>
 
       {isMinimized && (
-        <div className="fixed right-4 bottom-4 z-50">
+        <div className='fixed right-4 bottom-4 z-50'>
           {restoreButton && <div onClick={() => setIsMinimized(false)}>{restoreButton}</div>}
         </div>
       )}

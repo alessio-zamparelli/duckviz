@@ -4,29 +4,23 @@ import { PlusIcon, TrashIcon } from 'lucide-react'
 import { nanoid } from 'nanoid'
 import type { Data } from 'plotly.js'
 import { useRef } from 'react'
-import { default as createPlotlyComponent } from 'react-plotly.js/factory'
-
 import { PlotTypeArray, tracesAtom } from '@/atoms/plot.js'
 import { queryAnswerArrowAtom } from '@/atoms/query.js'
 import { isPlotPanelActiveAtom } from '@/atoms/state.js'
-// function getPlot(type: string, x: string, y: string){}
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox.js'
 import DraggableWrapper from '@/components/ui/dragble-wrapper'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Plotly from '@/lib/plotly'
+import { createPlotlyComponent } from '@/lib/plotly.lib'
 import { defConfig, defLayout } from '@/lib/plotly-config.js'
-// import { getPalette } from "@/lib/utils"
-// import { useResizeObserver } from "usehooks-ts"
 import { Field2Typed } from '@/lib/utils-components'
 
 export default function PlotBuilder({ data }: { data: Table }) {
   const Plot = createPlotlyComponent(Plotly)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  // const [xTrace, setXTrace] = useState<string>("")
-  // const [traces, setTraces] = useImmer<string[]>([""])
 
   const [traces] = useAtom(tracesAtom)
 
@@ -125,9 +119,9 @@ export default function PlotBuilder({ data }: { data: Table }) {
   // }, [data, traces, xTrace])
 
   return (
-    <div className="h-full grow">
+    <div className='h-full grow'>
       <Plot
-        className="h-full w-full grow"
+        className='h-full w-full grow'
         useResizeHandler
         data={
           traces
@@ -181,11 +175,11 @@ export default function PlotBuilder({ data }: { data: Table }) {
           // },
           // ]
         }
-        layout={{ ...defLayout }}
+        layout={{ ...defLayout, paper_bgcolor: 'rgba(255,255,255, 0)' }}
         config={{ ...defConfig }}
       />
 
-      <div ref={containerRef} className="grow" />
+      <div ref={containerRef} className='grow' />
     </div>
   )
 }
@@ -214,10 +208,10 @@ export function PlotConfig() {
   return (
     <DraggableWrapper
       title={'Plot config'}
-      width="min-w-xl"
-      height="auto"
-      fullScreenWidth="60%"
-      fullScreenHeight="auto"
+      width='min-w-xl'
+      height='auto'
+      fullScreenWidth='60%'
+      fullScreenHeight='auto'
       hidden={!activePanel}>
       {/* <div className="flex gap-2 items-end px-2"> */}
       {/* <div className=""> */}
@@ -237,15 +231,12 @@ export function PlotConfig() {
         </Select>
       </Label> */}
       {traces.map((t, idx) => (
-        <Card key={t.id} className="my-1 flex items-center gap-3 p-2">
-          <CardHeader className="p-0">
-            <CardTitle>
-              <Label>Trace {idx + 1} </Label>
-            </CardTitle>
-            {/* <CardDescription>Card Description</CardDescription> */}
-          </CardHeader>
+        <Card key={t.id} className='my-1 flex-row items-center gap-3 p-2'>
+          <CardTitle>
+            <Label>Trace {idx + 1} </Label>
+          </CardTitle>
 
-          <CardContent className="flex grow items-center gap-1 p-0">
+          <CardContent className='flex grow items-center gap-1 p-0'>
             <Select
               value={t.type}
               onValueChange={v =>
@@ -254,7 +245,7 @@ export function PlotConfig() {
                 })
               }>
               <SelectTrigger>
-                <SelectValue placeholder="Type?" />
+                <SelectValue placeholder='Type?' />
               </SelectTrigger>
               <SelectContent>
                 {PlotTypeArray.map(f => (
@@ -273,7 +264,7 @@ export function PlotConfig() {
                 })
               }>
               <SelectTrigger>
-                <SelectValue placeholder="X?" />
+                <SelectValue placeholder='X?' />
               </SelectTrigger>
               <SelectContent>
                 {data?.schema.fields.map(f => (
@@ -292,7 +283,7 @@ export function PlotConfig() {
                 })
               }>
               <SelectTrigger>
-                <SelectValue placeholder="Y?" />
+                <SelectValue placeholder='Y?' />
               </SelectTrigger>
               <SelectContent>
                 {data?.schema.fields.map(f => (
@@ -303,7 +294,7 @@ export function PlotConfig() {
               </SelectContent>
             </Select>
 
-            <div className="flex items-center space-x-2">
+            <div className='flex items-center space-x-2'>
               <Checkbox
                 id={`secondaryY-${idx}`}
                 checked={t.secondaryY}
@@ -315,28 +306,27 @@ export function PlotConfig() {
               />
               <label
                 htmlFor={`secondaryY-${idx}`}
-                className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                className='font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
                 Secondary Y
               </label>
             </div>
           </CardContent>
 
-          <CardFooter className="p-0">
+          <CardFooter className='p-0'>
             <Button
-              variant="destructive"
-              size="icon-sm"
-              type="button"
-              onClick={() => {
-                setTraces(t => void t.splice(idx, 1))
-              }}>
+              variant='destructive'
+              size='icon-sm'
+              type='button'
+              onClick={() => setTraces(t => void t.splice(idx, 1))}>
               <TrashIcon />
             </Button>
           </CardFooter>
         </Card>
       ))}
+
       <Button
-        className="mt-1"
-        size="sm"
+        className='mt-1'
+        size='sm'
         disabled={traces.findIndex(e => !e.x || !e.y) >= 0}
         onClick={() => {
           setTraces(t => void t.push({ id: nanoid(), secondaryY: false }))

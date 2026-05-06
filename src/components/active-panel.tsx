@@ -16,20 +16,11 @@ export function ActivePanelSelector({ position }: { position: 'top' | 'bottom' }
   const [queryAnswerArrow] = useAtom(queryAnswerArrowAtom)
   const [isLoading] = useAtom(isLoadingAtom)
 
-  // const tableRef = useRef<HTMLDivElement>(null)
-  // const { height = 0 } = useResizeObserver({
-  //   ref: tableRef,
-  //   box: "border-box",
-  //   onResize(size) {
-  //     console.log("resize", size)
-  //   },
-  // })
-
   function Selector({ active }: { active: panelType }) {
     return (
-      <div className="mx-px flex flex-col justify-center gap-2 px-1 shadow-sm">
+      <div className='mx-px flex flex-col justify-center gap-2 px-1 shadow-sm'>
         <Button
-          size="icon-xs"
+          size='icon-xs'
           variant={active === 'query' ? 'default' : 'ghost'}
           onClick={() => {
             if (position === 'top') {
@@ -41,7 +32,7 @@ export function ActivePanelSelector({ position }: { position: 'top' | 'bottom' }
           <DatabaseIcon />
         </Button>
         <Button
-          size="icon-xs"
+          size='icon-xs'
           variant={active === 'table' ? 'default' : 'ghost'}
           onClick={() => {
             if (position === 'top') {
@@ -57,7 +48,7 @@ export function ActivePanelSelector({ position }: { position: 'top' | 'bottom' }
           <TableIcon />
         </Button>
         <Button
-          size="icon-xs"
+          size='icon-xs'
           variant={active === 'plot' ? 'default' : 'ghost'}
           onClick={() => {
             if (position === 'top') {
@@ -74,16 +65,16 @@ export function ActivePanelSelector({ position }: { position: 'top' | 'bottom' }
 
   if (activePanel[position] === 'query') {
     return (
-      <div className="flex h-full w-full">
+      <div className='flex h-full w-full'>
         <CodeBox />
-        <Selector active="query" />
+        <Selector active='query' />
       </div>
     )
   }
 
   if (activePanel[position] === 'table') {
     return (
-      <div className="relative flex h-full overflow-auto" key={`${position}wrapper`}>
+      <div className='relative flex h-full overflow-auto' key={`${position}wrapper`}>
         <div
           className={cn(
             'absolute inset-0 z-50 flex items-center justify-center backdrop-blur-xs',
@@ -92,28 +83,28 @@ export function ActivePanelSelector({ position }: { position: 'top' | 'bottom' }
           loading
         </div>
         {queryAnswerArrow ? (
-          <div className="grow">
+          <div className='grow'>
             <DataTable
               key={`${position}table`}
-              className="h-full"
+              className='h-full'
               columns={Table2Column(queryAnswerArrow)}
               data={Table2Data(queryAnswerArrow)}
             />
-            <div className="absolute right-1 bottom-1">
+            <div className='absolute right-1 bottom-1'>
               <Badge>{queryAnswerArrow.numRows} row(s)</Badge>
             </div>
           </div>
         ) : (
-          <p className="flex grow items-center justify-center">Execute a query first</p>
+          <p className='flex grow items-center justify-center'>Execute a query first</p>
         )}
-        <Selector active="table" />
+        <Selector active='table' />
       </div>
     )
   }
 
   if (activePanel[position] === 'plot') {
     return (
-      <div className="relative flex h-full">
+      <div className='relative flex h-full'>
         <div
           className={cn(
             'absolute inset-0 z-50 flex items-center justify-center backdrop-blur-xs',
@@ -124,9 +115,9 @@ export function ActivePanelSelector({ position }: { position: 'top' | 'bottom' }
         {queryAnswerArrow ? (
           <PlotBuilder data={queryAnswerArrow} />
         ) : (
-          <p className="flex grow items-center justify-center">Execute a query first</p>
+          <p className='flex grow items-center justify-center'>Execute a query first</p>
         )}
-        <Selector active="plot" />
+        <Selector active='plot' />
       </div>
     )
   }

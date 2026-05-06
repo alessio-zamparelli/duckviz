@@ -17,14 +17,14 @@ export function CodeBoxTabs({ onRun, isMacOs }: { onRun?: () => void; isMacOs?: 
   const [renameActiveTab, setRenameActiveTab] = useState(false)
 
   return (
-    <div className="relative rounded-md border bg-background">
-      <ScrollArea className="whitespace-nowrap pr-28">
-        <div className="flex w-max items-center space-x-2 p-2">
+    <div className='flex items-center bg-background pr-2'>
+      <ScrollArea className='grow whitespace-nowrap'>
+        <div className='flex w-max items-center space-x-2 p-2'>
           {queryList.map((q, idx) => (
             <div className={cn('rounded px-2', queryListIdx === idx && 'bg-accent')} key={q.id}>
               <ContextMenu>
                 <ContextMenuTrigger
-                  className="cursor-pointer"
+                  className='cursor-pointer'
                   onClick={() => {
                     setQueryListIdx(idx)
                   }}>
@@ -71,22 +71,26 @@ export function CodeBoxTabs({ onRun, isMacOs }: { onRun?: () => void; isMacOs?: 
             </div>
           ))}
           <Button
-            size="icon-xs"
-            variant="outline"
+            size='icon-xs'
+            variant='outline'
             onClick={() => {
               setQueryList(s => [...s, { id: nanoid(), title: `q-${nanoid(4)}`, text: '' }])
             }}>
             <PlusCircleIcon />
           </Button>
         </div>
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation='horizontal' />
       </ScrollArea>
-      <div className="absolute inset-y-0 right-0 z-10 flex items-center gap-2 border-l bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-        <Button size="sm" variant="default" onClick={onRun}>
+      <Button size='sm' variant='default' onClick={onRun} className='sticky right-0'>
+        <PlayIcon />
+        <Kbd>{isMacOs ? '⌘' : 'Ctrl'}+ ⏎</Kbd>
+      </Button>
+      {/* <div className='absolute inset-y-0 right-0 z-10 flex items-center gap-2 border-l bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:bg-background/70'>
+        <Button size='sm' variant='default' onClick={onRun}>
           <PlayIcon />
           <Kbd>{isMacOs ? '⌘' : 'Ctrl'}+ ⏎</Kbd>
         </Button>
-      </div>
+      </div> */}
     </div>
   )
 }
